@@ -1,0 +1,14 @@
+{
+  "name": "discord-server-manager",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Manage a Discord server's structure from server-config.json via the Discord REST API.",
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "inspect": "node scripts/inspect.js",
+    "plan": "node scripts/sync.js --dry-run",
+    "sync": "node scripts/sync.js",
+    "test": "node --test test/*.test.js"
+  }
+}
