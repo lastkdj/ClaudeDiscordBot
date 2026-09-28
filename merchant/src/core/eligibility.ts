@@ -35,12 +35,14 @@ export function ineligibilityReason(p: ProviderSnapshot, o: OrderSnapshot, opts:
   if (p.suspendedForGame) return 'suspended for this game';
   if (!p.hasApprovedCapability) return 'no approved capability for this service';
   if (p.conflict) return 'conflict of interest';
-  const cap = inProbation(p.completedOrders) ? 1 : capacityFor(p.level, p.maxConcurrent);
+  // Probation (§17) is for NEW providers only; a level set by an executive lifts it.
+  const probation = p.level === 'NEW' && inProbation(p.completedOrders);
+  const cap = probation ? 1 : capacityFor(p.level, p.maxConcurrent);
   if (p.activeOrders >= cap) return 'at capacity';
   if (p.availability === 'OFFLINE' || p.availability === 'PAUSED') return `availability is ${p.availability.toLowerCase()}`;
   if (p.availability === 'BUSY' && !opts.allowBusy) return 'busy';
   if (levelRank(p.level) < levelRank(RISK_MIN_LEVEL[o.riskTier])) return `level ${p.level} is below ${RISK_MIN_LEVEL[o.riskTier]} for ${o.riskTier} risk`;
-  if (inProbation(p.completedOrders) && !o.trialEligible) return 'probation: trial services only';
+  if (probation && !o.trialEligible) return 'probation: trial services only';
   return null;
 }
 

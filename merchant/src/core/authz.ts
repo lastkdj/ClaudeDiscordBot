@@ -106,8 +106,12 @@ export function decide(actor: Actor, action: Action, res: Resource = {}, t: Thre
     case 'order.note':
     case 'order.requestCancel':
     case 'order.reopenBidding':
-    case 'quote.send':
     case 'ticket.handle':
+      // General tickets (no game) can be handled by any staff member.
+      if ((role === 'MANAGER' || role === 'STAFF') && !res.gameId) return allow('general ticket');
+      if (role === 'MANAGER' || role === 'STAFF') return staffGame ? allow() : deny('not one of your games');
+      return deny('staff only');
+    case 'quote.send':
     case 'order.recordCompletion':
     case 'order.markFailed':
       if (role === 'MANAGER' || role === 'STAFF') return staffGame ? allow() : deny('not one of your games');
