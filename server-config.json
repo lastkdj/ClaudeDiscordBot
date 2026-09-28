@@ -1,7 +1,99 @@
 {
   "guildId": "1554075315104514120",
-  "roles": [],
-  "categories": [],
+  "roles": [
+    {
+      "name": "Admin",
+      "color": "#e67e22",
+      "hoist": true,
+      "mentionable": true,
+      "permissions": [
+        "KICK_MEMBERS", "BAN_MEMBERS", "MODERATE_MEMBERS", "MANAGE_MESSAGES",
+        "MANAGE_THREADS", "MANAGE_NICKNAMES", "MUTE_MEMBERS", "DEAFEN_MEMBERS",
+        "MOVE_MEMBERS", "VIEW_AUDIT_LOG", "MANAGE_CHANNELS", "MANAGE_ROLES",
+        "MANAGE_GUILD", "MANAGE_WEBHOOKS", "MANAGE_EVENTS",
+        "MANAGE_GUILD_EXPRESSIONS", "MENTION_EVERYONE", "PRIORITY_SPEAKER"
+      ]
+    },
+    {
+      "name": "Mod",
+      "color": "#3498db",
+      "hoist": true,
+      "mentionable": true,
+      "permissions": [
+        "KICK_MEMBERS", "MODERATE_MEMBERS", "MANAGE_MESSAGES", "MANAGE_THREADS",
+        "MANAGE_NICKNAMES", "MUTE_MEMBERS", "DEAFEN_MEMBERS", "MOVE_MEMBERS",
+        "VIEW_AUDIT_LOG"
+      ]
+    },
+    {
+      "name": "Member",
+      "color": "#2ecc71",
+      "hoist": true,
+      "mentionable": false,
+      "permissions": []
+    },
+    {
+      "name": "Muted",
+      "color": "#95a5a6",
+      "hoist": false,
+      "mentionable": false,
+      "permissions": []
+    }
+  ],
+  "categories": [
+    {
+      "name": "Info",
+      "overwrites": [
+        { "role": "@everyone", "deny": ["SEND_MESSAGES", "CREATE_PUBLIC_THREADS", "CREATE_PRIVATE_THREADS"] },
+        { "role": "Mod", "allow": ["SEND_MESSAGES"] },
+        { "role": "Admin", "allow": ["SEND_MESSAGES"] }
+      ],
+      "channels": [
+        { "name": "welcome", "topic": "Welcome! Start here." },
+        { "name": "rules", "topic": "Server rules. Read before posting." },
+        { "name": "announcements", "topic": "Server news and events." }
+      ]
+    },
+    {
+      "id": "1554075316568334336",
+      "name": "Community",
+      "overwrites": [
+        { "role": "Muted", "deny": ["SEND_MESSAGES", "SEND_MESSAGES_IN_THREADS", "CREATE_PUBLIC_THREADS", "CREATE_PRIVATE_THREADS", "ADD_REACTIONS"] }
+      ],
+      "channels": [
+        { "id": "1554075316568334338", "name": "general", "topic": "General chat" },
+        { "name": "looking-for-group", "topic": "Find people to play with" },
+        { "name": "clips-and-media", "topic": "Screenshots, clips and highlights", "slowmode": 10 },
+        { "name": "off-topic", "topic": "Anything that isn't gaming" }
+      ]
+    },
+    {
+      "id": "1554075316568334337",
+      "name": "Gaming Voice",
+      "overwrites": [
+        { "role": "Muted", "deny": ["SPEAK", "STREAM", "SEND_MESSAGES"] }
+      ],
+      "channels": [
+        { "id": "1554075316568334339", "name": "General", "type": "voice" },
+        { "name": "Squad 1", "type": "voice", "userLimit": 5 },
+        { "name": "Squad 2", "type": "voice", "userLimit": 5 },
+        { "name": "AFK", "type": "voice" }
+      ]
+    },
+    {
+      "name": "Staff",
+      "overwrites": [
+        { "role": "@everyone", "deny": ["VIEW_CHANNEL"] },
+        { "role": "Mod", "allow": ["VIEW_CHANNEL"] },
+        { "role": "Admin", "allow": ["VIEW_CHANNEL"] }
+      ],
+      "channels": [
+        { "name": "mod-chat", "topic": "Staff only" },
+        { "name": "mod-log", "topic": "Moderation actions and notes" },
+        { "name": "Staff Voice", "type": "voice", "userLimit": 10 }
+      ]
+    }
+  ],
   "channels": [],
   "ignore": { "roles": [], "channels": [] }
 }
