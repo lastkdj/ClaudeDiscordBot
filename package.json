@@ -4,11 +4,14 @@
   "private": true,
   "description": "Manage a Discord server's structure from server-config.json via the Discord REST API.",
   "type": "module",
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "inspect": "node scripts/inspect.js",
     "plan": "node scripts/sync.js --dry-run",
     "sync": "node scripts/sync.js",
-    "test": "node --test test/*.test.js"
+    "test": "node --test test/*.test.js",
+    "audit": "node scripts/audit.js"
   }
 }

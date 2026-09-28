@@ -1,99 +1,2393 @@
 {
   "guildId": "1554075315104514120",
+  "guild": {
+    "community": true,
+    "verificationLevel": "LOW",
+    "explicitContentFilter": "ALL_MEMBERS",
+    "defaultNotifications": "ONLY_MENTIONS",
+    "rulesChannel": "rules",
+    "publicUpdatesChannel": "system-alerts",
+    "systemChannel": null
+  },
   "roles": [
     {
-      "name": "Admin",
+      "name": "ClaudeBot",
+      "managed": true
+    },
+    {
+      "name": "Executive",
+      "color": "#f1c40f",
+      "hoist": true,
+      "mentionable": false,
+      "permissions": [
+        "VIEW_AUDIT_LOG",
+        "MANAGE_MESSAGES",
+        "MANAGE_THREADS",
+        "MODERATE_MEMBERS",
+        "KICK_MEMBERS",
+        "BAN_MEMBERS",
+        "MANAGE_NICKNAMES"
+      ]
+    },
+    {
+      "name": "Manager",
       "color": "#e67e22",
       "hoist": true,
-      "mentionable": true,
+      "mentionable": false,
       "permissions": [
-        "KICK_MEMBERS", "BAN_MEMBERS", "MODERATE_MEMBERS", "MANAGE_MESSAGES",
-        "MANAGE_THREADS", "MANAGE_NICKNAMES", "MUTE_MEMBERS", "DEAFEN_MEMBERS",
-        "MOVE_MEMBERS", "VIEW_AUDIT_LOG", "MANAGE_CHANNELS", "MANAGE_ROLES",
-        "MANAGE_GUILD", "MANAGE_WEBHOOKS", "MANAGE_EVENTS",
-        "MANAGE_GUILD_EXPRESSIONS", "MENTION_EVERYONE", "PRIORITY_SPEAKER"
+        "MODERATE_MEMBERS"
       ]
     },
     {
-      "name": "Mod",
+      "name": "Staff",
       "color": "#3498db",
-      "hoist": true,
-      "mentionable": true,
-      "permissions": [
-        "KICK_MEMBERS", "MODERATE_MEMBERS", "MANAGE_MESSAGES", "MANAGE_THREADS",
-        "MANAGE_NICKNAMES", "MUTE_MEMBERS", "DEAFEN_MEMBERS", "MOVE_MEMBERS",
-        "VIEW_AUDIT_LOG"
-      ]
-    },
-    {
-      "name": "Member",
-      "color": "#2ecc71",
       "hoist": true,
       "mentionable": false,
       "permissions": []
     },
     {
-      "name": "Muted",
-      "color": "#95a5a6",
+      "name": "TheMerchant",
+      "managed": true
+    },
+    {
+      "name": "WoW Team",
+      "color": null,
+      "hoist": false,
+      "mentionable": false,
+      "permissions": []
+    },
+    {
+      "name": "Albion Team",
+      "color": null,
+      "hoist": false,
+      "mentionable": false,
+      "permissions": []
+    },
+    {
+      "name": "RuneScape Team",
+      "color": null,
+      "hoist": false,
+      "mentionable": false,
+      "permissions": []
+    },
+    {
+      "name": "Diablo Team",
+      "color": null,
+      "hoist": false,
+      "mentionable": false,
+      "permissions": []
+    },
+    {
+      "name": "Provider",
+      "color": null,
+      "hoist": false,
+      "mentionable": false,
+      "permissions": []
+    },
+    {
+      "name": "WoW Provider",
+      "color": null,
+      "hoist": false,
+      "mentionable": false,
+      "permissions": []
+    },
+    {
+      "name": "Albion Provider",
+      "color": null,
+      "hoist": false,
+      "mentionable": false,
+      "permissions": []
+    },
+    {
+      "name": "RuneScape Provider",
+      "color": null,
+      "hoist": false,
+      "mentionable": false,
+      "permissions": []
+    },
+    {
+      "name": "Diablo Provider",
+      "color": null,
+      "hoist": false,
+      "mentionable": false,
+      "permissions": []
+    },
+    {
+      "name": "Provider Applicant",
+      "color": null,
+      "hoist": false,
+      "mentionable": false,
+      "permissions": []
+    },
+    {
+      "name": "Customer",
+      "color": null,
       "hoist": false,
       "mentionable": false,
       "permissions": []
     }
   ],
+  "everyone": {
+    "permissions": [
+      "VIEW_CHANNEL",
+      "SEND_MESSAGES",
+      "SEND_MESSAGES_IN_THREADS",
+      "READ_MESSAGE_HISTORY",
+      "ADD_REACTIONS",
+      "EMBED_LINKS",
+      "ATTACH_FILES",
+      "USE_EXTERNAL_EMOJIS",
+      "USE_APPLICATION_COMMANDS",
+      "CONNECT",
+      "SPEAK",
+      "USE_VAD",
+      "STREAM",
+      "CHANGE_NICKNAME",
+      "CREATE_INSTANT_INVITE"
+    ]
+  },
   "categories": [
     {
-      "name": "Info",
+      "name": "📌 START HERE",
       "overwrites": [
-        { "role": "@everyone", "deny": ["SEND_MESSAGES", "CREATE_PUBLIC_THREADS", "CREATE_PRIVATE_THREADS"] },
-        { "role": "Mod", "allow": ["SEND_MESSAGES"] },
-        { "role": "Admin", "allow": ["SEND_MESSAGES"] }
+        {
+          "role": "@everyone",
+          "allow": [
+            "VIEW_CHANNEL",
+            "READ_MESSAGE_HISTORY"
+          ],
+          "deny": [
+            "SEND_MESSAGES",
+            "CREATE_PUBLIC_THREADS",
+            "CREATE_PRIVATE_THREADS"
+          ]
+        },
+        {
+          "role": "Executive",
+          "allow": [
+            "SEND_MESSAGES"
+          ],
+          "deny": []
+        },
+        {
+          "role": "ClaudeBot",
+          "allow": [
+            "VIEW_CHANNEL"
+          ],
+          "deny": []
+        },
+        {
+          "role": "TheMerchant",
+          "allow": [
+            "VIEW_CHANNEL",
+            "READ_MESSAGE_HISTORY",
+            "SEND_MESSAGES",
+            "SEND_MESSAGES_IN_THREADS",
+            "CREATE_PUBLIC_THREADS",
+            "CREATE_PRIVATE_THREADS",
+            "MANAGE_THREADS",
+            "MANAGE_MESSAGES",
+            "PIN_MESSAGES",
+            "EMBED_LINKS",
+            "ATTACH_FILES",
+            "ADD_REACTIONS"
+          ],
+          "deny": []
+        }
       ],
       "channels": [
-        { "name": "welcome", "topic": "Welcome! Start here." },
-        { "name": "rules", "topic": "Server rules. Read before posting." },
-        { "name": "announcements", "topic": "Server news and events." }
+        {
+          "name": "welcome",
+          "topic": "What TheMerchant is. Pick Customer or Provider below to get started."
+        },
+        {
+          "name": "rules",
+          "topic": "Community rules. By staying in the server you agree to them."
+        },
+        {
+          "name": "announcements",
+          "type": "announcement",
+          "topic": "Shop news from TheMerchant."
+        },
+        {
+          "name": "how-to-order",
+          "topic": "How to order: buy on our marketplace listings; use #direct-order for custom quotes."
+        }
       ]
     },
     {
-      "id": "1554075316568334336",
-      "name": "Community",
+      "name": "🛒 CUSTOMERS",
       "overwrites": [
-        { "role": "Muted", "deny": ["SEND_MESSAGES", "SEND_MESSAGES_IN_THREADS", "CREATE_PUBLIC_THREADS", "CREATE_PRIVATE_THREADS", "ADD_REACTIONS"] }
+        {
+          "role": "@everyone",
+          "allow": [],
+          "deny": [
+            "VIEW_CHANNEL",
+            "SEND_MESSAGES",
+            "CREATE_PUBLIC_THREADS",
+            "CREATE_PRIVATE_THREADS"
+          ]
+        },
+        {
+          "role": "Customer",
+          "allow": [
+            "VIEW_CHANNEL",
+            "READ_MESSAGE_HISTORY",
+            "SEND_MESSAGES_IN_THREADS",
+            "ADD_REACTIONS",
+            "EMBED_LINKS",
+            "ATTACH_FILES"
+          ],
+          "deny": []
+        },
+        {
+          "role": "Provider",
+          "allow": [
+            "VIEW_CHANNEL",
+            "READ_MESSAGE_HISTORY",
+            "SEND_MESSAGES_IN_THREADS",
+            "ADD_REACTIONS",
+            "EMBED_LINKS",
+            "ATTACH_FILES"
+          ],
+          "deny": []
+        },
+        {
+          "role": "Staff",
+          "allow": [
+            "VIEW_CHANNEL",
+            "READ_MESSAGE_HISTORY",
+            "SEND_MESSAGES_IN_THREADS",
+            "ADD_REACTIONS",
+            "EMBED_LINKS",
+            "ATTACH_FILES"
+          ],
+          "deny": []
+        },
+        {
+          "role": "Manager",
+          "allow": [
+            "VIEW_CHANNEL",
+            "READ_MESSAGE_HISTORY",
+            "SEND_MESSAGES_IN_THREADS",
+            "ADD_REACTIONS",
+            "EMBED_LINKS",
+            "ATTACH_FILES"
+          ],
+          "deny": []
+        },
+        {
+          "role": "Executive",
+          "allow": [
+            "VIEW_CHANNEL",
+            "READ_MESSAGE_HISTORY",
+            "SEND_MESSAGES_IN_THREADS",
+            "ADD_REACTIONS",
+            "EMBED_LINKS",
+            "ATTACH_FILES"
+          ],
+          "deny": []
+        },
+        {
+          "role": "ClaudeBot",
+          "allow": [
+            "VIEW_CHANNEL"
+          ],
+          "deny": []
+        },
+        {
+          "role": "TheMerchant",
+          "allow": [
+            "VIEW_CHANNEL",
+            "READ_MESSAGE_HISTORY",
+            "SEND_MESSAGES",
+            "SEND_MESSAGES_IN_THREADS",
+            "CREATE_PUBLIC_THREADS",
+            "CREATE_PRIVATE_THREADS",
+            "MANAGE_THREADS",
+            "MANAGE_MESSAGES",
+            "PIN_MESSAGES",
+            "EMBED_LINKS",
+            "ATTACH_FILES",
+            "ADD_REACTIONS"
+          ],
+          "deny": []
+        }
       ],
       "channels": [
-        { "id": "1554075316568334338", "name": "general", "topic": "General chat" },
-        { "name": "looking-for-group", "topic": "Find people to play with" },
-        { "name": "clips-and-media", "topic": "Screenshots, clips and highlights", "slowmode": 10 },
-        { "name": "off-topic", "topic": "Anything that isn't gaming" }
+        {
+          "name": "marketplace",
+          "topic": "Links to TheMerchant listings per game."
+        },
+        {
+          "name": "support",
+          "topic": "Press [Open ticket] for a private support thread.",
+          "defaultAutoArchive": 4320
+        },
+        {
+          "name": "direct-order",
+          "topic": "Press [Request a quote] for a private quote thread.",
+          "defaultAutoArchive": 4320
+        }
       ]
     },
     {
-      "id": "1554075316568334337",
-      "name": "Gaming Voice",
+      "name": "🤝 PROVIDER HUB",
       "overwrites": [
-        { "role": "Muted", "deny": ["SPEAK", "STREAM", "SEND_MESSAGES"] }
+        {
+          "role": "@everyone",
+          "allow": [],
+          "deny": [
+            "VIEW_CHANNEL",
+            "SEND_MESSAGES",
+            "CREATE_PUBLIC_THREADS",
+            "CREATE_PRIVATE_THREADS"
+          ]
+        },
+        {
+          "role": "Provider",
+          "allow": [
+            "VIEW_CHANNEL",
+            "READ_MESSAGE_HISTORY"
+          ],
+          "deny": []
+        },
+        {
+          "role": "Provider Applicant",
+          "allow": [
+            "VIEW_CHANNEL",
+            "READ_MESSAGE_HISTORY"
+          ],
+          "deny": []
+        },
+        {
+          "role": "Manager",
+          "allow": [
+            "VIEW_CHANNEL",
+            "READ_MESSAGE_HISTORY"
+          ],
+          "deny": []
+        },
+        {
+          "role": "Executive",
+          "allow": [
+            "VIEW_CHANNEL",
+            "READ_MESSAGE_HISTORY"
+          ],
+          "deny": []
+        },
+        {
+          "role": "ClaudeBot",
+          "allow": [
+            "VIEW_CHANNEL"
+          ],
+          "deny": []
+        },
+        {
+          "role": "TheMerchant",
+          "allow": [
+            "VIEW_CHANNEL",
+            "READ_MESSAGE_HISTORY",
+            "SEND_MESSAGES",
+            "SEND_MESSAGES_IN_THREADS",
+            "CREATE_PUBLIC_THREADS",
+            "CREATE_PRIVATE_THREADS",
+            "MANAGE_THREADS",
+            "MANAGE_MESSAGES",
+            "PIN_MESSAGES",
+            "EMBED_LINKS",
+            "ATTACH_FILES",
+            "ADD_REACTIONS"
+          ],
+          "deny": []
+        }
       ],
       "channels": [
-        { "id": "1554075316568334339", "name": "General", "type": "voice" },
-        { "name": "Squad 1", "type": "voice", "userLimit": 5 },
-        { "name": "Squad 2", "type": "voice", "userLimit": 5 },
-        { "name": "AFK", "type": "voice" }
+        {
+          "name": "provider-rules",
+          "topic": "Rules for providers. Read before applying."
+        },
+        {
+          "name": "provider-apply",
+          "topic": "Accept the rules, then press [Apply].",
+          "overwrites": [
+            {
+              "role": "@everyone",
+              "allow": [],
+              "deny": [
+                "VIEW_CHANNEL",
+                "SEND_MESSAGES",
+                "CREATE_PUBLIC_THREADS",
+                "CREATE_PRIVATE_THREADS"
+              ]
+            },
+            {
+              "role": "Provider Applicant",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY"
+              ],
+              "deny": []
+            },
+            {
+              "role": "Manager",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY"
+              ],
+              "deny": []
+            },
+            {
+              "role": "Executive",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY"
+              ],
+              "deny": []
+            },
+            {
+              "role": "ClaudeBot",
+              "allow": [
+                "VIEW_CHANNEL"
+              ],
+              "deny": []
+            },
+            {
+              "role": "TheMerchant",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES",
+                "SEND_MESSAGES_IN_THREADS",
+                "CREATE_PUBLIC_THREADS",
+                "CREATE_PRIVATE_THREADS",
+                "MANAGE_THREADS",
+                "MANAGE_MESSAGES",
+                "PIN_MESSAGES",
+                "EMBED_LINKS",
+                "ATTACH_FILES",
+                "ADD_REACTIONS"
+              ],
+              "deny": []
+            }
+          ]
+        },
+        {
+          "name": "provider-news",
+          "topic": "Announcements for providers.",
+          "overwrites": [
+            {
+              "role": "@everyone",
+              "allow": [],
+              "deny": [
+                "VIEW_CHANNEL",
+                "SEND_MESSAGES",
+                "CREATE_PUBLIC_THREADS",
+                "CREATE_PRIVATE_THREADS"
+              ]
+            },
+            {
+              "role": "Provider",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY"
+              ],
+              "deny": []
+            },
+            {
+              "role": "Provider Applicant",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY"
+              ],
+              "deny": []
+            },
+            {
+              "role": "Manager",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES"
+              ],
+              "deny": []
+            },
+            {
+              "role": "Executive",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES"
+              ],
+              "deny": []
+            },
+            {
+              "role": "ClaudeBot",
+              "allow": [
+                "VIEW_CHANNEL"
+              ],
+              "deny": []
+            },
+            {
+              "role": "TheMerchant",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES",
+                "SEND_MESSAGES_IN_THREADS",
+                "CREATE_PUBLIC_THREADS",
+                "CREATE_PRIVATE_THREADS",
+                "MANAGE_THREADS",
+                "MANAGE_MESSAGES",
+                "PIN_MESSAGES",
+                "EMBED_LINKS",
+                "ATTACH_FILES",
+                "ADD_REACTIONS"
+              ],
+              "deny": []
+            }
+          ]
+        },
+        {
+          "name": "provider-panel",
+          "topic": "Availability, balance, stats and capabilities. Replies are only visible to you.",
+          "overwrites": [
+            {
+              "role": "@everyone",
+              "allow": [],
+              "deny": [
+                "VIEW_CHANNEL",
+                "SEND_MESSAGES",
+                "CREATE_PUBLIC_THREADS",
+                "CREATE_PRIVATE_THREADS"
+              ]
+            },
+            {
+              "role": "Provider",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY"
+              ],
+              "deny": []
+            },
+            {
+              "role": "Executive",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY"
+              ],
+              "deny": []
+            },
+            {
+              "role": "ClaudeBot",
+              "allow": [
+                "VIEW_CHANNEL"
+              ],
+              "deny": []
+            },
+            {
+              "role": "TheMerchant",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES",
+                "SEND_MESSAGES_IN_THREADS",
+                "CREATE_PUBLIC_THREADS",
+                "CREATE_PRIVATE_THREADS",
+                "MANAGE_THREADS",
+                "MANAGE_MESSAGES",
+                "PIN_MESSAGES",
+                "EMBED_LINKS",
+                "ATTACH_FILES",
+                "ADD_REACTIONS"
+              ],
+              "deny": []
+            }
+          ]
+        },
+        {
+          "name": "provider-desks",
+          "topic": "Each provider has one private desk thread here.",
+          "defaultAutoArchive": 10080,
+          "overwrites": [
+            {
+              "role": "@everyone",
+              "allow": [],
+              "deny": [
+                "VIEW_CHANNEL",
+                "SEND_MESSAGES",
+                "CREATE_PUBLIC_THREADS",
+                "CREATE_PRIVATE_THREADS"
+              ]
+            },
+            {
+              "role": "Provider",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES_IN_THREADS",
+                "ADD_REACTIONS",
+                "EMBED_LINKS",
+                "ATTACH_FILES"
+              ],
+              "deny": []
+            },
+            {
+              "role": "Executive",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES_IN_THREADS",
+                "ADD_REACTIONS",
+                "EMBED_LINKS",
+                "ATTACH_FILES"
+              ],
+              "deny": []
+            },
+            {
+              "role": "ClaudeBot",
+              "allow": [
+                "VIEW_CHANNEL"
+              ],
+              "deny": []
+            },
+            {
+              "role": "TheMerchant",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES",
+                "SEND_MESSAGES_IN_THREADS",
+                "CREATE_PUBLIC_THREADS",
+                "CREATE_PRIVATE_THREADS",
+                "MANAGE_THREADS",
+                "MANAGE_MESSAGES",
+                "PIN_MESSAGES",
+                "EMBED_LINKS",
+                "ATTACH_FILES",
+                "ADD_REACTIONS"
+              ],
+              "deny": []
+            }
+          ]
+        }
       ]
     },
     {
-      "name": "Staff",
+      "name": "⚔️ WORLD OF WARCRAFT",
       "overwrites": [
-        { "role": "@everyone", "deny": ["VIEW_CHANNEL"] },
-        { "role": "Mod", "allow": ["VIEW_CHANNEL"] },
-        { "role": "Admin", "allow": ["VIEW_CHANNEL"] }
+        {
+          "role": "@everyone",
+          "allow": [],
+          "deny": [
+            "VIEW_CHANNEL",
+            "SEND_MESSAGES",
+            "CREATE_PUBLIC_THREADS",
+            "CREATE_PRIVATE_THREADS"
+          ]
+        },
+        {
+          "role": "WoW Team",
+          "allow": [
+            "VIEW_CHANNEL",
+            "READ_MESSAGE_HISTORY",
+            "SEND_MESSAGES",
+            "SEND_MESSAGES_IN_THREADS",
+            "ADD_REACTIONS",
+            "EMBED_LINKS",
+            "ATTACH_FILES"
+          ],
+          "deny": []
+        },
+        {
+          "role": "Executive",
+          "allow": [
+            "VIEW_CHANNEL",
+            "READ_MESSAGE_HISTORY",
+            "SEND_MESSAGES",
+            "SEND_MESSAGES_IN_THREADS",
+            "ADD_REACTIONS",
+            "EMBED_LINKS",
+            "ATTACH_FILES"
+          ],
+          "deny": []
+        },
+        {
+          "role": "ClaudeBot",
+          "allow": [
+            "VIEW_CHANNEL"
+          ],
+          "deny": []
+        },
+        {
+          "role": "TheMerchant",
+          "allow": [
+            "VIEW_CHANNEL",
+            "READ_MESSAGE_HISTORY",
+            "SEND_MESSAGES",
+            "SEND_MESSAGES_IN_THREADS",
+            "CREATE_PUBLIC_THREADS",
+            "CREATE_PRIVATE_THREADS",
+            "MANAGE_THREADS",
+            "MANAGE_MESSAGES",
+            "PIN_MESSAGES",
+            "EMBED_LINKS",
+            "ATTACH_FILES",
+            "ADD_REACTIONS"
+          ],
+          "deny": []
+        }
       ],
       "channels": [
-        { "name": "mod-chat", "topic": "Staff only" },
-        { "name": "mod-log", "topic": "Moderation actions and notes" },
-        { "name": "Staff Voice", "type": "voice", "userLimit": 10 }
+        {
+          "name": "wow-orders",
+          "type": "forum",
+          "topic": "WoW orders: one post per order. Tags show the status.",
+          "requireTag": true,
+          "defaultAutoArchive": 10080,
+          "tags": [
+            {
+              "name": "Needs Review",
+              "emoji": "🔎",
+              "moderated": true
+            },
+            {
+              "name": "Bidding",
+              "emoji": "🪙",
+              "moderated": true
+            },
+            {
+              "name": "Awaiting Provider",
+              "emoji": "⏳",
+              "moderated": true
+            },
+            {
+              "name": "In Progress",
+              "emoji": "⚙️",
+              "moderated": true
+            },
+            {
+              "name": "Delivered",
+              "emoji": "📦",
+              "moderated": true
+            },
+            {
+              "name": "Completed",
+              "emoji": "✅",
+              "moderated": true
+            },
+            {
+              "name": "Problem",
+              "emoji": "⚠️",
+              "moderated": true
+            }
+          ],
+          "overwrites": [
+            {
+              "role": "@everyone",
+              "allow": [],
+              "deny": [
+                "VIEW_CHANNEL",
+                "SEND_MESSAGES",
+                "CREATE_PUBLIC_THREADS",
+                "CREATE_PRIVATE_THREADS"
+              ]
+            },
+            {
+              "role": "WoW Team",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES_IN_THREADS",
+                "ADD_REACTIONS",
+                "EMBED_LINKS",
+                "ATTACH_FILES"
+              ],
+              "deny": [
+                "SEND_MESSAGES"
+              ]
+            },
+            {
+              "role": "Executive",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES_IN_THREADS",
+                "ADD_REACTIONS",
+                "EMBED_LINKS",
+                "ATTACH_FILES"
+              ],
+              "deny": [
+                "SEND_MESSAGES"
+              ]
+            },
+            {
+              "role": "ClaudeBot",
+              "allow": [
+                "VIEW_CHANNEL"
+              ],
+              "deny": []
+            },
+            {
+              "role": "TheMerchant",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES",
+                "SEND_MESSAGES_IN_THREADS",
+                "CREATE_PUBLIC_THREADS",
+                "CREATE_PRIVATE_THREADS",
+                "MANAGE_THREADS",
+                "MANAGE_MESSAGES",
+                "PIN_MESSAGES",
+                "EMBED_LINKS",
+                "ATTACH_FILES",
+                "ADD_REACTIONS"
+              ],
+              "deny": []
+            }
+          ]
+        },
+        {
+          "name": "wow-ops",
+          "topic": "WoW staff and manager coordination."
+        },
+        {
+          "name": "wow-dashboard",
+          "topic": "Live WoW operations dashboard (updated by TheMerchant).",
+          "overwrites": [
+            {
+              "role": "@everyone",
+              "allow": [],
+              "deny": [
+                "VIEW_CHANNEL",
+                "SEND_MESSAGES",
+                "CREATE_PUBLIC_THREADS",
+                "CREATE_PRIVATE_THREADS"
+              ]
+            },
+            {
+              "role": "WoW Team",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY"
+              ],
+              "deny": [
+                "SEND_MESSAGES",
+                "SEND_MESSAGES_IN_THREADS"
+              ]
+            },
+            {
+              "role": "Executive",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY"
+              ],
+              "deny": [
+                "SEND_MESSAGES",
+                "SEND_MESSAGES_IN_THREADS"
+              ]
+            },
+            {
+              "role": "ClaudeBot",
+              "allow": [
+                "VIEW_CHANNEL"
+              ],
+              "deny": []
+            },
+            {
+              "role": "TheMerchant",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES",
+                "SEND_MESSAGES_IN_THREADS",
+                "CREATE_PUBLIC_THREADS",
+                "CREATE_PRIVATE_THREADS",
+                "MANAGE_THREADS",
+                "MANAGE_MESSAGES",
+                "PIN_MESSAGES",
+                "EMBED_LINKS",
+                "ATTACH_FILES",
+                "ADD_REACTIONS"
+              ],
+              "deny": []
+            }
+          ]
+        },
+        {
+          "name": "wow-order-rooms",
+          "topic": "Private order rooms (one thread per active order).",
+          "defaultAutoArchive": 10080,
+          "overwrites": [
+            {
+              "role": "@everyone",
+              "allow": [],
+              "deny": [
+                "VIEW_CHANNEL",
+                "SEND_MESSAGES",
+                "CREATE_PUBLIC_THREADS",
+                "CREATE_PRIVATE_THREADS"
+              ]
+            },
+            {
+              "role": "WoW Team",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES_IN_THREADS",
+                "ADD_REACTIONS",
+                "EMBED_LINKS",
+                "ATTACH_FILES"
+              ],
+              "deny": [
+                "SEND_MESSAGES"
+              ]
+            },
+            {
+              "role": "Executive",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES_IN_THREADS",
+                "ADD_REACTIONS",
+                "EMBED_LINKS",
+                "ATTACH_FILES"
+              ],
+              "deny": [
+                "SEND_MESSAGES"
+              ]
+            },
+            {
+              "role": "WoW Provider",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES_IN_THREADS",
+                "ADD_REACTIONS",
+                "EMBED_LINKS",
+                "ATTACH_FILES"
+              ],
+              "deny": [
+                "SEND_MESSAGES"
+              ]
+            },
+            {
+              "role": "ClaudeBot",
+              "allow": [
+                "VIEW_CHANNEL"
+              ],
+              "deny": []
+            },
+            {
+              "role": "TheMerchant",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES",
+                "SEND_MESSAGES_IN_THREADS",
+                "CREATE_PUBLIC_THREADS",
+                "CREATE_PRIVATE_THREADS",
+                "MANAGE_THREADS",
+                "MANAGE_MESSAGES",
+                "PIN_MESSAGES",
+                "EMBED_LINKS",
+                "ATTACH_FILES",
+                "ADD_REACTIONS"
+              ],
+              "deny": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "🏹 ALBION ONLINE",
+      "overwrites": [
+        {
+          "role": "@everyone",
+          "allow": [],
+          "deny": [
+            "VIEW_CHANNEL",
+            "SEND_MESSAGES",
+            "CREATE_PUBLIC_THREADS",
+            "CREATE_PRIVATE_THREADS"
+          ]
+        },
+        {
+          "role": "Albion Team",
+          "allow": [
+            "VIEW_CHANNEL",
+            "READ_MESSAGE_HISTORY",
+            "SEND_MESSAGES",
+            "SEND_MESSAGES_IN_THREADS",
+            "ADD_REACTIONS",
+            "EMBED_LINKS",
+            "ATTACH_FILES"
+          ],
+          "deny": []
+        },
+        {
+          "role": "Executive",
+          "allow": [
+            "VIEW_CHANNEL",
+            "READ_MESSAGE_HISTORY",
+            "SEND_MESSAGES",
+            "SEND_MESSAGES_IN_THREADS",
+            "ADD_REACTIONS",
+            "EMBED_LINKS",
+            "ATTACH_FILES"
+          ],
+          "deny": []
+        },
+        {
+          "role": "ClaudeBot",
+          "allow": [
+            "VIEW_CHANNEL"
+          ],
+          "deny": []
+        },
+        {
+          "role": "TheMerchant",
+          "allow": [
+            "VIEW_CHANNEL",
+            "READ_MESSAGE_HISTORY",
+            "SEND_MESSAGES",
+            "SEND_MESSAGES_IN_THREADS",
+            "CREATE_PUBLIC_THREADS",
+            "CREATE_PRIVATE_THREADS",
+            "MANAGE_THREADS",
+            "MANAGE_MESSAGES",
+            "PIN_MESSAGES",
+            "EMBED_LINKS",
+            "ATTACH_FILES",
+            "ADD_REACTIONS"
+          ],
+          "deny": []
+        }
+      ],
+      "channels": [
+        {
+          "name": "albion-orders",
+          "type": "forum",
+          "topic": "Albion orders: one post per order. Tags show the status.",
+          "requireTag": true,
+          "defaultAutoArchive": 10080,
+          "tags": [
+            {
+              "name": "Needs Review",
+              "emoji": "🔎",
+              "moderated": true
+            },
+            {
+              "name": "Bidding",
+              "emoji": "🪙",
+              "moderated": true
+            },
+            {
+              "name": "Awaiting Provider",
+              "emoji": "⏳",
+              "moderated": true
+            },
+            {
+              "name": "In Progress",
+              "emoji": "⚙️",
+              "moderated": true
+            },
+            {
+              "name": "Delivered",
+              "emoji": "📦",
+              "moderated": true
+            },
+            {
+              "name": "Completed",
+              "emoji": "✅",
+              "moderated": true
+            },
+            {
+              "name": "Problem",
+              "emoji": "⚠️",
+              "moderated": true
+            }
+          ],
+          "overwrites": [
+            {
+              "role": "@everyone",
+              "allow": [],
+              "deny": [
+                "VIEW_CHANNEL",
+                "SEND_MESSAGES",
+                "CREATE_PUBLIC_THREADS",
+                "CREATE_PRIVATE_THREADS"
+              ]
+            },
+            {
+              "role": "Albion Team",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES_IN_THREADS",
+                "ADD_REACTIONS",
+                "EMBED_LINKS",
+                "ATTACH_FILES"
+              ],
+              "deny": [
+                "SEND_MESSAGES"
+              ]
+            },
+            {
+              "role": "Executive",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES_IN_THREADS",
+                "ADD_REACTIONS",
+                "EMBED_LINKS",
+                "ATTACH_FILES"
+              ],
+              "deny": [
+                "SEND_MESSAGES"
+              ]
+            },
+            {
+              "role": "ClaudeBot",
+              "allow": [
+                "VIEW_CHANNEL"
+              ],
+              "deny": []
+            },
+            {
+              "role": "TheMerchant",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES",
+                "SEND_MESSAGES_IN_THREADS",
+                "CREATE_PUBLIC_THREADS",
+                "CREATE_PRIVATE_THREADS",
+                "MANAGE_THREADS",
+                "MANAGE_MESSAGES",
+                "PIN_MESSAGES",
+                "EMBED_LINKS",
+                "ATTACH_FILES",
+                "ADD_REACTIONS"
+              ],
+              "deny": []
+            }
+          ]
+        },
+        {
+          "name": "albion-ops",
+          "topic": "Albion staff and manager coordination."
+        },
+        {
+          "name": "albion-dashboard",
+          "topic": "Live Albion operations dashboard (updated by TheMerchant).",
+          "overwrites": [
+            {
+              "role": "@everyone",
+              "allow": [],
+              "deny": [
+                "VIEW_CHANNEL",
+                "SEND_MESSAGES",
+                "CREATE_PUBLIC_THREADS",
+                "CREATE_PRIVATE_THREADS"
+              ]
+            },
+            {
+              "role": "Albion Team",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY"
+              ],
+              "deny": [
+                "SEND_MESSAGES",
+                "SEND_MESSAGES_IN_THREADS"
+              ]
+            },
+            {
+              "role": "Executive",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY"
+              ],
+              "deny": [
+                "SEND_MESSAGES",
+                "SEND_MESSAGES_IN_THREADS"
+              ]
+            },
+            {
+              "role": "ClaudeBot",
+              "allow": [
+                "VIEW_CHANNEL"
+              ],
+              "deny": []
+            },
+            {
+              "role": "TheMerchant",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES",
+                "SEND_MESSAGES_IN_THREADS",
+                "CREATE_PUBLIC_THREADS",
+                "CREATE_PRIVATE_THREADS",
+                "MANAGE_THREADS",
+                "MANAGE_MESSAGES",
+                "PIN_MESSAGES",
+                "EMBED_LINKS",
+                "ATTACH_FILES",
+                "ADD_REACTIONS"
+              ],
+              "deny": []
+            }
+          ]
+        },
+        {
+          "name": "albion-order-rooms",
+          "topic": "Private order rooms (one thread per active order).",
+          "defaultAutoArchive": 10080,
+          "overwrites": [
+            {
+              "role": "@everyone",
+              "allow": [],
+              "deny": [
+                "VIEW_CHANNEL",
+                "SEND_MESSAGES",
+                "CREATE_PUBLIC_THREADS",
+                "CREATE_PRIVATE_THREADS"
+              ]
+            },
+            {
+              "role": "Albion Team",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES_IN_THREADS",
+                "ADD_REACTIONS",
+                "EMBED_LINKS",
+                "ATTACH_FILES"
+              ],
+              "deny": [
+                "SEND_MESSAGES"
+              ]
+            },
+            {
+              "role": "Executive",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES_IN_THREADS",
+                "ADD_REACTIONS",
+                "EMBED_LINKS",
+                "ATTACH_FILES"
+              ],
+              "deny": [
+                "SEND_MESSAGES"
+              ]
+            },
+            {
+              "role": "Albion Provider",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES_IN_THREADS",
+                "ADD_REACTIONS",
+                "EMBED_LINKS",
+                "ATTACH_FILES"
+              ],
+              "deny": [
+                "SEND_MESSAGES"
+              ]
+            },
+            {
+              "role": "ClaudeBot",
+              "allow": [
+                "VIEW_CHANNEL"
+              ],
+              "deny": []
+            },
+            {
+              "role": "TheMerchant",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES",
+                "SEND_MESSAGES_IN_THREADS",
+                "CREATE_PUBLIC_THREADS",
+                "CREATE_PRIVATE_THREADS",
+                "MANAGE_THREADS",
+                "MANAGE_MESSAGES",
+                "PIN_MESSAGES",
+                "EMBED_LINKS",
+                "ATTACH_FILES",
+                "ADD_REACTIONS"
+              ],
+              "deny": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "🪓 RUNESCAPE",
+      "overwrites": [
+        {
+          "role": "@everyone",
+          "allow": [],
+          "deny": [
+            "VIEW_CHANNEL",
+            "SEND_MESSAGES",
+            "CREATE_PUBLIC_THREADS",
+            "CREATE_PRIVATE_THREADS"
+          ]
+        },
+        {
+          "role": "RuneScape Team",
+          "allow": [
+            "VIEW_CHANNEL",
+            "READ_MESSAGE_HISTORY",
+            "SEND_MESSAGES",
+            "SEND_MESSAGES_IN_THREADS",
+            "ADD_REACTIONS",
+            "EMBED_LINKS",
+            "ATTACH_FILES"
+          ],
+          "deny": []
+        },
+        {
+          "role": "Executive",
+          "allow": [
+            "VIEW_CHANNEL",
+            "READ_MESSAGE_HISTORY",
+            "SEND_MESSAGES",
+            "SEND_MESSAGES_IN_THREADS",
+            "ADD_REACTIONS",
+            "EMBED_LINKS",
+            "ATTACH_FILES"
+          ],
+          "deny": []
+        },
+        {
+          "role": "ClaudeBot",
+          "allow": [
+            "VIEW_CHANNEL"
+          ],
+          "deny": []
+        },
+        {
+          "role": "TheMerchant",
+          "allow": [
+            "VIEW_CHANNEL",
+            "READ_MESSAGE_HISTORY",
+            "SEND_MESSAGES",
+            "SEND_MESSAGES_IN_THREADS",
+            "CREATE_PUBLIC_THREADS",
+            "CREATE_PRIVATE_THREADS",
+            "MANAGE_THREADS",
+            "MANAGE_MESSAGES",
+            "PIN_MESSAGES",
+            "EMBED_LINKS",
+            "ATTACH_FILES",
+            "ADD_REACTIONS"
+          ],
+          "deny": []
+        }
+      ],
+      "channels": [
+        {
+          "name": "rs-orders",
+          "type": "forum",
+          "topic": "RuneScape orders: one post per order. Tags show the status.",
+          "requireTag": true,
+          "defaultAutoArchive": 10080,
+          "tags": [
+            {
+              "name": "Needs Review",
+              "emoji": "🔎",
+              "moderated": true
+            },
+            {
+              "name": "Bidding",
+              "emoji": "🪙",
+              "moderated": true
+            },
+            {
+              "name": "Awaiting Provider",
+              "emoji": "⏳",
+              "moderated": true
+            },
+            {
+              "name": "In Progress",
+              "emoji": "⚙️",
+              "moderated": true
+            },
+            {
+              "name": "Delivered",
+              "emoji": "📦",
+              "moderated": true
+            },
+            {
+              "name": "Completed",
+              "emoji": "✅",
+              "moderated": true
+            },
+            {
+              "name": "Problem",
+              "emoji": "⚠️",
+              "moderated": true
+            }
+          ],
+          "overwrites": [
+            {
+              "role": "@everyone",
+              "allow": [],
+              "deny": [
+                "VIEW_CHANNEL",
+                "SEND_MESSAGES",
+                "CREATE_PUBLIC_THREADS",
+                "CREATE_PRIVATE_THREADS"
+              ]
+            },
+            {
+              "role": "RuneScape Team",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES_IN_THREADS",
+                "ADD_REACTIONS",
+                "EMBED_LINKS",
+                "ATTACH_FILES"
+              ],
+              "deny": [
+                "SEND_MESSAGES"
+              ]
+            },
+            {
+              "role": "Executive",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES_IN_THREADS",
+                "ADD_REACTIONS",
+                "EMBED_LINKS",
+                "ATTACH_FILES"
+              ],
+              "deny": [
+                "SEND_MESSAGES"
+              ]
+            },
+            {
+              "role": "ClaudeBot",
+              "allow": [
+                "VIEW_CHANNEL"
+              ],
+              "deny": []
+            },
+            {
+              "role": "TheMerchant",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES",
+                "SEND_MESSAGES_IN_THREADS",
+                "CREATE_PUBLIC_THREADS",
+                "CREATE_PRIVATE_THREADS",
+                "MANAGE_THREADS",
+                "MANAGE_MESSAGES",
+                "PIN_MESSAGES",
+                "EMBED_LINKS",
+                "ATTACH_FILES",
+                "ADD_REACTIONS"
+              ],
+              "deny": []
+            }
+          ]
+        },
+        {
+          "name": "rs-ops",
+          "topic": "RuneScape staff and manager coordination."
+        },
+        {
+          "name": "rs-dashboard",
+          "topic": "Live RuneScape operations dashboard (updated by TheMerchant).",
+          "overwrites": [
+            {
+              "role": "@everyone",
+              "allow": [],
+              "deny": [
+                "VIEW_CHANNEL",
+                "SEND_MESSAGES",
+                "CREATE_PUBLIC_THREADS",
+                "CREATE_PRIVATE_THREADS"
+              ]
+            },
+            {
+              "role": "RuneScape Team",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY"
+              ],
+              "deny": [
+                "SEND_MESSAGES",
+                "SEND_MESSAGES_IN_THREADS"
+              ]
+            },
+            {
+              "role": "Executive",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY"
+              ],
+              "deny": [
+                "SEND_MESSAGES",
+                "SEND_MESSAGES_IN_THREADS"
+              ]
+            },
+            {
+              "role": "ClaudeBot",
+              "allow": [
+                "VIEW_CHANNEL"
+              ],
+              "deny": []
+            },
+            {
+              "role": "TheMerchant",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES",
+                "SEND_MESSAGES_IN_THREADS",
+                "CREATE_PUBLIC_THREADS",
+                "CREATE_PRIVATE_THREADS",
+                "MANAGE_THREADS",
+                "MANAGE_MESSAGES",
+                "PIN_MESSAGES",
+                "EMBED_LINKS",
+                "ATTACH_FILES",
+                "ADD_REACTIONS"
+              ],
+              "deny": []
+            }
+          ]
+        },
+        {
+          "name": "rs-order-rooms",
+          "topic": "Private order rooms (one thread per active order).",
+          "defaultAutoArchive": 10080,
+          "overwrites": [
+            {
+              "role": "@everyone",
+              "allow": [],
+              "deny": [
+                "VIEW_CHANNEL",
+                "SEND_MESSAGES",
+                "CREATE_PUBLIC_THREADS",
+                "CREATE_PRIVATE_THREADS"
+              ]
+            },
+            {
+              "role": "RuneScape Team",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES_IN_THREADS",
+                "ADD_REACTIONS",
+                "EMBED_LINKS",
+                "ATTACH_FILES"
+              ],
+              "deny": [
+                "SEND_MESSAGES"
+              ]
+            },
+            {
+              "role": "Executive",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES_IN_THREADS",
+                "ADD_REACTIONS",
+                "EMBED_LINKS",
+                "ATTACH_FILES"
+              ],
+              "deny": [
+                "SEND_MESSAGES"
+              ]
+            },
+            {
+              "role": "RuneScape Provider",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES_IN_THREADS",
+                "ADD_REACTIONS",
+                "EMBED_LINKS",
+                "ATTACH_FILES"
+              ],
+              "deny": [
+                "SEND_MESSAGES"
+              ]
+            },
+            {
+              "role": "ClaudeBot",
+              "allow": [
+                "VIEW_CHANNEL"
+              ],
+              "deny": []
+            },
+            {
+              "role": "TheMerchant",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES",
+                "SEND_MESSAGES_IN_THREADS",
+                "CREATE_PUBLIC_THREADS",
+                "CREATE_PRIVATE_THREADS",
+                "MANAGE_THREADS",
+                "MANAGE_MESSAGES",
+                "PIN_MESSAGES",
+                "EMBED_LINKS",
+                "ATTACH_FILES",
+                "ADD_REACTIONS"
+              ],
+              "deny": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "🔥 DIABLO",
+      "overwrites": [
+        {
+          "role": "@everyone",
+          "allow": [],
+          "deny": [
+            "VIEW_CHANNEL",
+            "SEND_MESSAGES",
+            "CREATE_PUBLIC_THREADS",
+            "CREATE_PRIVATE_THREADS"
+          ]
+        },
+        {
+          "role": "Diablo Team",
+          "allow": [
+            "VIEW_CHANNEL",
+            "READ_MESSAGE_HISTORY",
+            "SEND_MESSAGES",
+            "SEND_MESSAGES_IN_THREADS",
+            "ADD_REACTIONS",
+            "EMBED_LINKS",
+            "ATTACH_FILES"
+          ],
+          "deny": []
+        },
+        {
+          "role": "Executive",
+          "allow": [
+            "VIEW_CHANNEL",
+            "READ_MESSAGE_HISTORY",
+            "SEND_MESSAGES",
+            "SEND_MESSAGES_IN_THREADS",
+            "ADD_REACTIONS",
+            "EMBED_LINKS",
+            "ATTACH_FILES"
+          ],
+          "deny": []
+        },
+        {
+          "role": "ClaudeBot",
+          "allow": [
+            "VIEW_CHANNEL"
+          ],
+          "deny": []
+        },
+        {
+          "role": "TheMerchant",
+          "allow": [
+            "VIEW_CHANNEL",
+            "READ_MESSAGE_HISTORY",
+            "SEND_MESSAGES",
+            "SEND_MESSAGES_IN_THREADS",
+            "CREATE_PUBLIC_THREADS",
+            "CREATE_PRIVATE_THREADS",
+            "MANAGE_THREADS",
+            "MANAGE_MESSAGES",
+            "PIN_MESSAGES",
+            "EMBED_LINKS",
+            "ATTACH_FILES",
+            "ADD_REACTIONS"
+          ],
+          "deny": []
+        }
+      ],
+      "channels": [
+        {
+          "name": "diablo-orders",
+          "type": "forum",
+          "topic": "Diablo orders: one post per order. Tags show the status.",
+          "requireTag": true,
+          "defaultAutoArchive": 10080,
+          "tags": [
+            {
+              "name": "Needs Review",
+              "emoji": "🔎",
+              "moderated": true
+            },
+            {
+              "name": "Bidding",
+              "emoji": "🪙",
+              "moderated": true
+            },
+            {
+              "name": "Awaiting Provider",
+              "emoji": "⏳",
+              "moderated": true
+            },
+            {
+              "name": "In Progress",
+              "emoji": "⚙️",
+              "moderated": true
+            },
+            {
+              "name": "Delivered",
+              "emoji": "📦",
+              "moderated": true
+            },
+            {
+              "name": "Completed",
+              "emoji": "✅",
+              "moderated": true
+            },
+            {
+              "name": "Problem",
+              "emoji": "⚠️",
+              "moderated": true
+            }
+          ],
+          "overwrites": [
+            {
+              "role": "@everyone",
+              "allow": [],
+              "deny": [
+                "VIEW_CHANNEL",
+                "SEND_MESSAGES",
+                "CREATE_PUBLIC_THREADS",
+                "CREATE_PRIVATE_THREADS"
+              ]
+            },
+            {
+              "role": "Diablo Team",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES_IN_THREADS",
+                "ADD_REACTIONS",
+                "EMBED_LINKS",
+                "ATTACH_FILES"
+              ],
+              "deny": [
+                "SEND_MESSAGES"
+              ]
+            },
+            {
+              "role": "Executive",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES_IN_THREADS",
+                "ADD_REACTIONS",
+                "EMBED_LINKS",
+                "ATTACH_FILES"
+              ],
+              "deny": [
+                "SEND_MESSAGES"
+              ]
+            },
+            {
+              "role": "ClaudeBot",
+              "allow": [
+                "VIEW_CHANNEL"
+              ],
+              "deny": []
+            },
+            {
+              "role": "TheMerchant",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES",
+                "SEND_MESSAGES_IN_THREADS",
+                "CREATE_PUBLIC_THREADS",
+                "CREATE_PRIVATE_THREADS",
+                "MANAGE_THREADS",
+                "MANAGE_MESSAGES",
+                "PIN_MESSAGES",
+                "EMBED_LINKS",
+                "ATTACH_FILES",
+                "ADD_REACTIONS"
+              ],
+              "deny": []
+            }
+          ]
+        },
+        {
+          "name": "diablo-ops",
+          "topic": "Diablo staff and manager coordination."
+        },
+        {
+          "name": "diablo-dashboard",
+          "topic": "Live Diablo operations dashboard (updated by TheMerchant).",
+          "overwrites": [
+            {
+              "role": "@everyone",
+              "allow": [],
+              "deny": [
+                "VIEW_CHANNEL",
+                "SEND_MESSAGES",
+                "CREATE_PUBLIC_THREADS",
+                "CREATE_PRIVATE_THREADS"
+              ]
+            },
+            {
+              "role": "Diablo Team",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY"
+              ],
+              "deny": [
+                "SEND_MESSAGES",
+                "SEND_MESSAGES_IN_THREADS"
+              ]
+            },
+            {
+              "role": "Executive",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY"
+              ],
+              "deny": [
+                "SEND_MESSAGES",
+                "SEND_MESSAGES_IN_THREADS"
+              ]
+            },
+            {
+              "role": "ClaudeBot",
+              "allow": [
+                "VIEW_CHANNEL"
+              ],
+              "deny": []
+            },
+            {
+              "role": "TheMerchant",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES",
+                "SEND_MESSAGES_IN_THREADS",
+                "CREATE_PUBLIC_THREADS",
+                "CREATE_PRIVATE_THREADS",
+                "MANAGE_THREADS",
+                "MANAGE_MESSAGES",
+                "PIN_MESSAGES",
+                "EMBED_LINKS",
+                "ATTACH_FILES",
+                "ADD_REACTIONS"
+              ],
+              "deny": []
+            }
+          ]
+        },
+        {
+          "name": "diablo-order-rooms",
+          "topic": "Private order rooms (one thread per active order).",
+          "defaultAutoArchive": 10080,
+          "overwrites": [
+            {
+              "role": "@everyone",
+              "allow": [],
+              "deny": [
+                "VIEW_CHANNEL",
+                "SEND_MESSAGES",
+                "CREATE_PUBLIC_THREADS",
+                "CREATE_PRIVATE_THREADS"
+              ]
+            },
+            {
+              "role": "Diablo Team",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES_IN_THREADS",
+                "ADD_REACTIONS",
+                "EMBED_LINKS",
+                "ATTACH_FILES"
+              ],
+              "deny": [
+                "SEND_MESSAGES"
+              ]
+            },
+            {
+              "role": "Executive",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES_IN_THREADS",
+                "ADD_REACTIONS",
+                "EMBED_LINKS",
+                "ATTACH_FILES"
+              ],
+              "deny": [
+                "SEND_MESSAGES"
+              ]
+            },
+            {
+              "role": "Diablo Provider",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES_IN_THREADS",
+                "ADD_REACTIONS",
+                "EMBED_LINKS",
+                "ATTACH_FILES"
+              ],
+              "deny": [
+                "SEND_MESSAGES"
+              ]
+            },
+            {
+              "role": "ClaudeBot",
+              "allow": [
+                "VIEW_CHANNEL"
+              ],
+              "deny": []
+            },
+            {
+              "role": "TheMerchant",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES",
+                "SEND_MESSAGES_IN_THREADS",
+                "CREATE_PUBLIC_THREADS",
+                "CREATE_PRIVATE_THREADS",
+                "MANAGE_THREADS",
+                "MANAGE_MESSAGES",
+                "PIN_MESSAGES",
+                "EMBED_LINKS",
+                "ATTACH_FILES",
+                "ADD_REACTIONS"
+              ],
+              "deny": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "🧭 MANAGEMENT",
+      "overwrites": [
+        {
+          "role": "@everyone",
+          "allow": [],
+          "deny": [
+            "VIEW_CHANNEL",
+            "SEND_MESSAGES",
+            "CREATE_PUBLIC_THREADS",
+            "CREATE_PRIVATE_THREADS"
+          ]
+        },
+        {
+          "role": "Staff",
+          "allow": [
+            "VIEW_CHANNEL",
+            "READ_MESSAGE_HISTORY",
+            "SEND_MESSAGES",
+            "SEND_MESSAGES_IN_THREADS",
+            "ADD_REACTIONS",
+            "EMBED_LINKS",
+            "ATTACH_FILES",
+            "CONNECT",
+            "SPEAK"
+          ],
+          "deny": []
+        },
+        {
+          "role": "Manager",
+          "allow": [
+            "VIEW_CHANNEL",
+            "READ_MESSAGE_HISTORY",
+            "SEND_MESSAGES",
+            "SEND_MESSAGES_IN_THREADS",
+            "ADD_REACTIONS",
+            "EMBED_LINKS",
+            "ATTACH_FILES",
+            "CONNECT",
+            "SPEAK"
+          ],
+          "deny": []
+        },
+        {
+          "role": "Executive",
+          "allow": [
+            "VIEW_CHANNEL",
+            "READ_MESSAGE_HISTORY",
+            "SEND_MESSAGES",
+            "SEND_MESSAGES_IN_THREADS",
+            "ADD_REACTIONS",
+            "EMBED_LINKS",
+            "ATTACH_FILES",
+            "CONNECT",
+            "SPEAK"
+          ],
+          "deny": []
+        },
+        {
+          "role": "ClaudeBot",
+          "allow": [
+            "VIEW_CHANNEL"
+          ],
+          "deny": []
+        },
+        {
+          "role": "TheMerchant",
+          "allow": [
+            "VIEW_CHANNEL",
+            "READ_MESSAGE_HISTORY",
+            "SEND_MESSAGES",
+            "SEND_MESSAGES_IN_THREADS",
+            "CREATE_PUBLIC_THREADS",
+            "CREATE_PRIVATE_THREADS",
+            "MANAGE_THREADS",
+            "MANAGE_MESSAGES",
+            "PIN_MESSAGES",
+            "EMBED_LINKS",
+            "ATTACH_FILES",
+            "ADD_REACTIONS"
+          ],
+          "deny": []
+        }
+      ],
+      "channels": [
+        {
+          "name": "staff-room",
+          "topic": "All staff: cross-game chat. No financial data here."
+        },
+        {
+          "name": "managers",
+          "topic": "Managers and executives.",
+          "overwrites": [
+            {
+              "role": "@everyone",
+              "allow": [],
+              "deny": [
+                "VIEW_CHANNEL",
+                "SEND_MESSAGES",
+                "CREATE_PUBLIC_THREADS",
+                "CREATE_PRIVATE_THREADS"
+              ]
+            },
+            {
+              "role": "Manager",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES",
+                "SEND_MESSAGES_IN_THREADS",
+                "ADD_REACTIONS",
+                "EMBED_LINKS",
+                "ATTACH_FILES"
+              ],
+              "deny": []
+            },
+            {
+              "role": "Executive",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES",
+                "SEND_MESSAGES_IN_THREADS",
+                "ADD_REACTIONS",
+                "EMBED_LINKS",
+                "ATTACH_FILES"
+              ],
+              "deny": []
+            },
+            {
+              "role": "ClaudeBot",
+              "allow": [
+                "VIEW_CHANNEL"
+              ],
+              "deny": []
+            },
+            {
+              "role": "TheMerchant",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES",
+                "SEND_MESSAGES_IN_THREADS",
+                "CREATE_PUBLIC_THREADS",
+                "CREATE_PRIVATE_THREADS",
+                "MANAGE_THREADS",
+                "MANAGE_MESSAGES",
+                "PIN_MESSAGES",
+                "EMBED_LINKS",
+                "ATTACH_FILES",
+                "ADD_REACTIONS"
+              ],
+              "deny": []
+            }
+          ]
+        },
+        {
+          "name": "provider-applications",
+          "type": "forum",
+          "topic": "One post per provider application, tagged by game.",
+          "requireTag": true,
+          "defaultAutoArchive": 10080,
+          "tags": [
+            {
+              "name": "WoW",
+              "moderated": true
+            },
+            {
+              "name": "Albion",
+              "moderated": true
+            },
+            {
+              "name": "RuneScape",
+              "moderated": true
+            },
+            {
+              "name": "Diablo",
+              "moderated": true
+            },
+            {
+              "name": "Pending",
+              "emoji": "⏳",
+              "moderated": true
+            },
+            {
+              "name": "Approved",
+              "emoji": "✅",
+              "moderated": true
+            },
+            {
+              "name": "Rejected",
+              "emoji": "❌",
+              "moderated": true
+            }
+          ],
+          "overwrites": [
+            {
+              "role": "@everyone",
+              "allow": [],
+              "deny": [
+                "VIEW_CHANNEL",
+                "SEND_MESSAGES",
+                "CREATE_PUBLIC_THREADS",
+                "CREATE_PRIVATE_THREADS"
+              ]
+            },
+            {
+              "role": "Manager",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES_IN_THREADS",
+                "ADD_REACTIONS",
+                "EMBED_LINKS",
+                "ATTACH_FILES"
+              ],
+              "deny": [
+                "SEND_MESSAGES"
+              ]
+            },
+            {
+              "role": "Executive",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES_IN_THREADS",
+                "ADD_REACTIONS",
+                "EMBED_LINKS",
+                "ATTACH_FILES"
+              ],
+              "deny": [
+                "SEND_MESSAGES"
+              ]
+            },
+            {
+              "role": "ClaudeBot",
+              "allow": [
+                "VIEW_CHANNEL"
+              ],
+              "deny": []
+            },
+            {
+              "role": "TheMerchant",
+              "allow": [
+                "VIEW_CHANNEL",
+                "READ_MESSAGE_HISTORY",
+                "SEND_MESSAGES",
+                "SEND_MESSAGES_IN_THREADS",
+                "CREATE_PUBLIC_THREADS",
+                "CREATE_PRIVATE_THREADS",
+                "MANAGE_THREADS",
+                "MANAGE_MESSAGES",
+                "PIN_MESSAGES",
+                "EMBED_LINKS",
+                "ATTACH_FILES",
+                "ADD_REACTIONS"
+              ],
+              "deny": []
+            }
+          ]
+        },
+        {
+          "name": "Staff Voice",
+          "type": "voice"
+        }
+      ]
+    },
+    {
+      "name": "🏛️ EXECUTIVE",
+      "overwrites": [
+        {
+          "role": "@everyone",
+          "allow": [],
+          "deny": [
+            "VIEW_CHANNEL",
+            "SEND_MESSAGES",
+            "CREATE_PUBLIC_THREADS",
+            "CREATE_PRIVATE_THREADS"
+          ]
+        },
+        {
+          "role": "Executive",
+          "allow": [
+            "VIEW_CHANNEL",
+            "READ_MESSAGE_HISTORY",
+            "SEND_MESSAGES",
+            "SEND_MESSAGES_IN_THREADS",
+            "ADD_REACTIONS",
+            "EMBED_LINKS",
+            "ATTACH_FILES"
+          ],
+          "deny": []
+        },
+        {
+          "role": "ClaudeBot",
+          "allow": [
+            "VIEW_CHANNEL"
+          ],
+          "deny": []
+        },
+        {
+          "role": "TheMerchant",
+          "allow": [
+            "VIEW_CHANNEL",
+            "READ_MESSAGE_HISTORY",
+            "SEND_MESSAGES",
+            "SEND_MESSAGES_IN_THREADS",
+            "CREATE_PUBLIC_THREADS",
+            "CREATE_PRIVATE_THREADS",
+            "MANAGE_THREADS",
+            "MANAGE_MESSAGES",
+            "PIN_MESSAGES",
+            "EMBED_LINKS",
+            "ATTACH_FILES",
+            "ADD_REACTIONS"
+          ],
+          "deny": []
+        }
+      ],
+      "channels": [
+        {
+          "name": "exec-reports",
+          "topic": "Daily, weekly and monthly reports."
+        },
+        {
+          "name": "finance",
+          "topic": "Payout requests and approvals, ledger adjustments."
+        },
+        {
+          "name": "audit-log",
+          "topic": "High-importance audit events."
+        },
+        {
+          "name": "exec-chat"
+        }
+      ]
+    },
+    {
+      "name": "⚙️ SYSTEM",
+      "overwrites": [
+        {
+          "role": "@everyone",
+          "allow": [],
+          "deny": [
+            "VIEW_CHANNEL",
+            "SEND_MESSAGES",
+            "CREATE_PUBLIC_THREADS",
+            "CREATE_PRIVATE_THREADS"
+          ]
+        },
+        {
+          "role": "Executive",
+          "allow": [
+            "VIEW_CHANNEL",
+            "READ_MESSAGE_HISTORY",
+            "SEND_MESSAGES",
+            "SEND_MESSAGES_IN_THREADS",
+            "ADD_REACTIONS",
+            "EMBED_LINKS",
+            "ATTACH_FILES"
+          ],
+          "deny": []
+        },
+        {
+          "role": "ClaudeBot",
+          "allow": [
+            "VIEW_CHANNEL"
+          ],
+          "deny": []
+        },
+        {
+          "role": "TheMerchant",
+          "allow": [
+            "VIEW_CHANNEL",
+            "READ_MESSAGE_HISTORY",
+            "SEND_MESSAGES",
+            "SEND_MESSAGES_IN_THREADS",
+            "CREATE_PUBLIC_THREADS",
+            "CREATE_PRIVATE_THREADS",
+            "MANAGE_THREADS",
+            "MANAGE_MESSAGES",
+            "PIN_MESSAGES",
+            "EMBED_LINKS",
+            "ATTACH_FILES",
+            "ADD_REACTIONS"
+          ],
+          "deny": []
+        }
+      ],
+      "channels": [
+        {
+          "name": "system-alerts",
+          "topic": "Integration failures, stuck orders, job errors. Also receives Discord community updates."
+        },
+        {
+          "name": "integration-events",
+          "topic": "Marketplace event feed."
+        }
       ]
     }
   ],
   "channels": [],
-  "ignore": { "roles": [], "channels": [] }
+  "ignore": {
+    "roles": [],
+    "channels": []
+  }
 }
