@@ -31,8 +31,10 @@ README.md for the commands and config format.
 - Bot invited with option (a): the requested permissions plus
   READ_MESSAGE_HISTORY, ADD_REACTIONS, ATTACH_FILES, EMBED_LINKS, CONNECT, SPEAK.
   No Administrator.
-- Inspect done (2026-09-28): server is still Discord defaults; the ClaudeBot
-  role currently HAS Administrator (owner to remove, see ARCHITECTURE Q13).
+- Inspect done (2026-09-28): server is still Discord defaults. The ClaudeBot
+  role no longer has Administrator but holds 47 perms, more than option (a)
+  (see ARCHITECTURE Q13). TheMerchant's Message Content intent was found ON;
+  owner to turn it off.
 - The owner manages the server entirely through Claude Code chat. Make no
   Discord changes until the owner instructs, even non-destructive ones.
 - Project: TheMerchant shop operations system. Proposal in
