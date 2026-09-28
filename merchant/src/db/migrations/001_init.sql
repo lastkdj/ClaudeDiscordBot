@@ -41,6 +41,10 @@ CREATE TABLE games (
   code       text NOT NULL UNIQUE,
   name       text NOT NULL,
   emoji      text,
+  -- Discord naming (server-config.json): "<short_name> Team" / "<short_name> Provider" roles,
+  -- "#<channel_prefix>-orders" / -ops / -dashboard / -order-rooms channels.
+  short_name     text NOT NULL,
+  channel_prefix text NOT NULL UNIQUE,
   active     boolean NOT NULL DEFAULT true,
   direct_orders_enabled boolean NOT NULL DEFAULT false,  -- mode A (§8), off until marketplace terms are checked
   created_at timestamptz NOT NULL DEFAULT now()

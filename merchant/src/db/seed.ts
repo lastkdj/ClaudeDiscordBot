@@ -10,9 +10,9 @@ export async function seed(q: Q): Promise<{ games: number; services: number }> {
   let services = 0;
   for (const g of SEED) {
     const game = (await q.query(
-      `INSERT INTO games (code, name, emoji) VALUES ($1, $2, $3)
+      `INSERT INTO games (code, name, emoji, short_name, channel_prefix) VALUES ($1, $2, $3, $4, $5)
        ON CONFLICT (code) DO UPDATE SET code = EXCLUDED.code RETURNING id`,
-      [g.code, g.name, g.emoji],
+      [g.code, g.name, g.emoji, g.shortName, g.channelPrefix],
     )).rows[0];
     for (const [i, [code, name]] of g.versions.entries()) {
       await q.query(`INSERT INTO game_versions (game_id, code, name, sort) VALUES ($1, $2, $3, $4) ON CONFLICT (game_id, code) DO NOTHING`, [game.id, code, name, i]);

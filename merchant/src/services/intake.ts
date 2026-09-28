@@ -167,7 +167,8 @@ function revive(e: any): MarketplaceEvent {
 
 export async function processIntegrationEvent(ctx: Ctx, eventId: string): Promise<string> {
   const row = await one(ctx.db, 'SELECT * FROM integration_events WHERE id = $1', [eventId]);
-  if (!row || row.status !== 'RECEIVED') return 'skip';
+  // FAILED rows are retried by the job queue until it gives up.
+  if (!row || !['RECEIVED', 'FAILED'].includes(row.status)) return 'skip';
   const event = revive(row.payload.event);
   try {
     const result = await ctx.db.tx((q) => applyEvent(q, ctx, row.source, event));

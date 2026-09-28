@@ -167,6 +167,7 @@ export async function declineInvitation(ctx: Ctx, actor: Actor, orderId: string)
 export async function closeBidding(q: Q, ctx: Ctx, order: OrderRow, actor: Actor, reason: string): Promise<OrderRow> {
   const updated = await transition(q, order, 'BID_REVIEW', actor, { reason, source: ctx.source, payload: { round: order.bid_round } });
   await enqueue(q, 'discord.alert', { channel: 'ops', gameId: order.game_id, text: `🪙 ${order.internal_order_id}: bidding closed (${reason}). Review the bids on the order post.` });
+  await enqueue(q, 'selection.auto', { orderId: order.id }, { dedupeKey: `auto:${order.id}:${order.bid_round}` });
   return updated;
 }
 

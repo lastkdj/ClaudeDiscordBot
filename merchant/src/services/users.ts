@@ -149,8 +149,8 @@ export async function desiredRoleNames(q: Q, userId: string): Promise<{ discordU
   if (u.status !== 'ACTIVE') return { discordUserId: u.discord_user_id, roles };
   if (u.org_role === 'CUSTOMER') roles.push('Customer');
   if (u.org_role === 'STAFF' || u.org_role === 'MANAGER') {
-    const games = await many(q, `SELECT g.name, g.code FROM staff_game_assignments s JOIN games g ON g.id = s.game_id WHERE s.user_id = $1`, [userId]);
-    for (const g of games) roles.push(teamRoleName(g.code, g.name));
+    const games = await many(q, `SELECT g.short_name FROM staff_game_assignments s JOIN games g ON g.id = s.game_id WHERE s.user_id = $1`, [userId]);
+    for (const g of games) roles.push(teamRoleName(g.short_name));
   }
   const p = await one(q, `SELECT id, status FROM providers WHERE user_id = $1`, [userId]);
   if (p) {
@@ -159,24 +159,23 @@ export async function desiredRoleNames(q: Q, userId: string): Promise<{ discordU
       roles.push('Provider');
       const games = await many(
         q,
-        `SELECT DISTINCT g.code, g.name FROM provider_capabilities c JOIN games g ON g.id = c.game_id
+        `SELECT DISTINCT g.short_name FROM provider_capabilities c JOIN games g ON g.id = c.game_id
          WHERE c.provider_id = $1 AND c.status = 'APPROVED'
            AND NOT EXISTS (SELECT 1 FROM provider_game_suspensions s WHERE s.provider_id = c.provider_id AND s.game_id = c.game_id AND s.lifted_at IS NULL)`,
         [p.id],
       );
-      for (const g of games) roles.push(providerRoleName(g.code, g.name));
+      for (const g of games) roles.push(providerRoleName(g.short_name));
     }
   }
   return { discordUserId: u.discord_user_id, roles: [...new Set(roles)] };
 }
 
-/** Short names used for the per-game Discord roles (server-config.json). */
-const SHORT: Record<string, string> = { wow: 'WoW', albion: 'Albion', runescape: 'RuneScape', diablo: 'Diablo' };
-export const teamRoleName = (code: string, name: string) => `${SHORT[code] ?? name} Team`;
-export const providerRoleName = (code: string, name: string) => `${SHORT[code] ?? name} Provider`;
+/** Per-game Discord role names (must match server-config.json). */
+export const teamRoleName = (shortName: string) => `${shortName} Team`;
+export const providerRoleName = (shortName: string) => `${shortName} Provider`;
 
 /** Roles TheMerchant manages; anything else on a member is left alone. */
 export async function managedRoleNames(q: Q): Promise<string[]> {
-  const games = await many(q, 'SELECT code, name FROM games');
-  return ['Customer', 'Provider', 'Provider Applicant', ...games.flatMap((g) => [teamRoleName(g.code, g.name), providerRoleName(g.code, g.name)])];
+  const games = await many(q, 'SELECT short_name FROM games');
+  return ['Customer', 'Provider', 'Provider Applicant', ...games.flatMap((g) => [teamRoleName(g.short_name), providerRoleName(g.short_name)])];
 }

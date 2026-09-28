@@ -22,6 +22,8 @@ export interface SeedGame {
   code: string;
   name: string;
   emoji: string;
+  shortName: string;
+  channelPrefix: string;
   versions: [string, string][];
   categories: SeedCategory[];
   /** Fields a provider needs, shared by the game's services unless overridden. */
@@ -37,6 +39,8 @@ export const SEED: SeedGame[] = [
     code: 'wow',
     name: 'World of Warcraft',
     emoji: '⚔️',
+    shortName: 'WoW',
+    channelPrefix: 'wow',
     versions: [['retail', 'Retail'], ['classic-prog', 'Classic Progression'], ['classic-era', 'Classic Era / Hardcore / Seasonal']],
     requirements: [
       { key: 'region', label: 'Region (EU/US)', required: true },
@@ -73,6 +77,8 @@ export const SEED: SeedGame[] = [
     code: 'albion',
     name: 'Albion Online',
     emoji: '🏹',
+    shortName: 'Albion',
+    channelPrefix: 'albion',
     versions: [['americas', 'Americas'], ['europe', 'Europe'], ['asia', 'Asia']],
     requirements: [
       { key: 'character', label: 'Character name', required: true },
@@ -97,6 +103,8 @@ export const SEED: SeedGame[] = [
     code: 'runescape',
     name: 'RuneScape',
     emoji: '🪓',
+    shortName: 'RuneScape',
+    channelPrefix: 'rs',
     versions: [['osrs', 'Old School'], ['rs3', 'RuneScape 3']],
     requirements: [
       { key: 'rsn', label: 'RuneScape name', required: true },
@@ -120,6 +128,8 @@ export const SEED: SeedGame[] = [
     code: 'diablo',
     name: 'Diablo',
     emoji: '🔥',
+    shortName: 'Diablo',
+    channelPrefix: 'diablo',
     versions: [['d4-season', 'Diablo IV (Season)'], ['d4-eternal', 'Diablo IV (Eternal)'], ['d2r-ladder', 'Diablo II: Resurrected (Ladder)'], ['d2r-nonladder', 'Diablo II: Resurrected (Non-ladder)'], ['immortal', 'Diablo Immortal']],
     requirements: [
       { key: 'battletag', label: 'BattleTag / character', required: true },

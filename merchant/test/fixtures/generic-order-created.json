@@ -1,0 +1,25 @@
+{
+  "events": [
+    {
+      "id": "evt_1001",
+      "type": "ORDER_CREATED",
+      "occurred_at": "2026-09-28T10:00:00Z",
+      "order_id": "MP-5001",
+      "order": {
+        "id": "MP-5001",
+        "listing_id": "LST-MPLUS-10",
+        "buyer": "buyer_jane",
+        "price": "60.00",
+        "commission": "6.00",
+        "currency": "EUR",
+        "quantity": 1,
+        "deadline_at": "2026-09-28T20:00:00Z",
+        "fields": { "region": "EU", "realm": "Silvermoon / Alliance", "character": "Aria (Mage)" },
+        "note": "please hurry",
+        "paid": true,
+        "status": "OPEN",
+        "updated_at": "2026-09-28T10:00:00Z"
+      }
+    }
+  ]
+}

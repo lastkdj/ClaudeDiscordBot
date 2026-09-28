@@ -58,7 +58,8 @@ const RULES: Rule[] = [
   { from: ['PROVIDER_SELECTED'], to: 'PROVIDER_CONFIRMED', who: ['PROVIDER', ...MGMT] },
   { from: ['BIDDING', 'PROVIDER_SELECTED', 'PROVIDER_FAILED'], to: 'REASSIGNMENT_REQUIRED', who: [...OPS, 'SYSTEM', 'PROVIDER'] },
   { from: ['PROVIDER_CONFIRMED'], to: 'IN_PROGRESS', who: ['PROVIDER', ...OPS] },
-  { from: ['IN_PROGRESS'], to: 'DELIVERED', who: ['PROVIDER', ...OPS] },
+  // A marketplace completion also implies delivery.
+  { from: ['IN_PROGRESS'], to: 'DELIVERED', who: ['PROVIDER', ...OPS, ...AUTO] },
   { from: ['PROVIDER_CONFIRMED', 'IN_PROGRESS', 'DELIVERED'], to: 'PROVIDER_FAILED', who: OPS, reason: true },
   { from: ['DELIVERED'], to: 'MARKETPLACE_COMPLETION', who: [...OPS, ...AUTO] },
   { from: ['MARKETPLACE_COMPLETION', 'PARTIAL_REFUND'], to: 'COMPLETED', who: [...OPS, ...AUTO] },

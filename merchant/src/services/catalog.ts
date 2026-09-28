@@ -7,7 +7,7 @@ import { many, one, type Q } from '../db/pool.js';
 import { audit } from './audit.js';
 import type { Ctx } from './context.js';
 
-export interface Game { id: string; code: string; name: string; emoji: string | null; active: boolean; direct_orders_enabled: boolean }
+export interface Game { id: string; code: string; name: string; emoji: string | null; short_name: string; channel_prefix: string; active: boolean; direct_orders_enabled: boolean }
 export interface GameVersion { id: string; game_id: string; code: string; name: string }
 export interface Category { id: string; game_id: string; code: string; name: string }
 export interface Requirement { key: string; label: string; required: boolean }
