@@ -30,7 +30,12 @@ README.md for the commands and config format.
 - Bot invited with option (a): the requested permissions plus
   READ_MESSAGE_HISTORY, ADD_REACTIONS, ATTACH_FILES, EMBED_LINKS, CONNECT, SPEAK.
   No Administrator.
-- Next: run `npm run inspect` and show the user the summary. Then propose a
-  structure based on the server's purpose, write it to the config, dry-run
-  it, and wait for approval. `server-config.json` is still empty. Don't run
-  `--prune` against it, because every channel and role would be deleted.
+- Inspect done (2026-09-28): server is still Discord defaults; the ClaudeBot
+  role currently HAS Administrator (owner to remove, see ARCHITECTURE Q13).
+- The owner manages the server entirely through Claude Code chat. Make no
+  Discord changes until the owner instructs, even non-destructive ones.
+- Project: TheMerchant shop operations system. Proposal in
+  `docs/ARCHITECTURE.md`, awaiting owner approval. Two bots: ClaudeBot
+  (structure, this repo's sync tool) and TheMerchant (operations bot, to be
+  built under `merchant/`). `server-config.json` holds an earlier gaming
+  draft that will be replaced by the §1 tree once approved. Never apply it.
