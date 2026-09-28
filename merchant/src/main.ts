@@ -13,7 +13,8 @@ import { registerBusinessJobs } from './worker/business-jobs.js';
 import { JobRunner } from './worker/runner.js';
 import { enqueueDue } from './worker/schedule.js';
 
-const cfg = loadConfig({ requireDiscord: true });
+const cfg = loadConfig({ requireDiscord: false });
+if (cfg.run.bot && (!cfg.discordToken || !cfg.guildId)) throw new Error('MERCHANT_DISCORD_TOKEN and DISCORD_GUILD_ID are required to run the bot.');
 const log = createLogger(cfg.logLevel, cfg.secrets);
 const db = createDb(cfg.databaseUrl, { ssl: cfg.databaseSsl });
 const ctx: Ctx = { db, log, now: () => new Date(), payoutKey: cfg.payoutKey, source: 'JOB' };
