@@ -47,7 +47,7 @@ async function plan(client, cfg) {
 
 async function apply(client, p, flags = new Set()) {
   const live = await fetchLiveState(client, GUILD_ID);
-  const ctx = { client, guildId: GUILD_ID, botTop: live.botTop, reason: 'test', roleIds: new Map(p.seed.roleIds), ids: new Map(p.seed.ids) };
+  const ctx = { client, guildId: GUILD_ID, botTop: live.botTop, botRoleIds: live.botMember.roles, reason: 'test', roleIds: new Map(p.seed.roleIds), ids: new Map(p.seed.ids) };
   for (const op of p.ops) {
     if (op.gate && !flags.has(op.gate)) continue;
     await op.run(ctx);
@@ -135,4 +135,94 @@ test('client waits out 429s, retries, and never leaks the token', async () => {
   assert.equal(seen[0], `Bot ${token}`);
   await assert.rejects(client.get('/users/@me'), (err) => err.status === 403 && !err.message.includes(token));
   assert.ok(logs.every((l) => !l.includes(token)));
+});
+
+const merchantLike = () => ({
+  guildId: GUILD_ID,
+  guild: {
+    community: true, verificationLevel: 'LOW', explicitContentFilter: 'ALL_MEMBERS',
+    rulesChannel: 'rules', publicUpdatesChannel: 'alerts', systemChannel: null,
+  },
+  categories: [
+    { name: 'Start', channels: [{ name: 'rules' }, { name: 'announcements', type: 'announcement' }] },
+    {
+      name: 'Ops',
+      channels: [
+        { name: 'orders', type: 'forum', requireTag: true, defaultAutoArchive: 1440, tags: [{ name: 'Bidding', moderated: true }, { name: 'Done', moderated: true }] },
+        { name: 'alerts' },
+      ],
+    },
+  ],
+  ignore: { channels: ['general', 'General', 'Text Channels', 'Voice Channels'] },
+});
+
+test('community: announcement channels wait as text, then convert once the owner enables Community', async () => {
+  const client = createFakeDiscord();
+  const p1 = await plan(client, merchantLike());
+  assert.ok(p1.manual.some((m) => m.includes('Enable Community')));
+  const settings = p1.ops.find((o) => o.kind === 'guild');
+  assert.ok(settings.details.some((d) => d.startsWith('verificationLevel')));
+  assert.ok(!settings.details.some((d) => d.startsWith('rulesChannel')), 'rules channel waits for Community');
+  await apply(client, p1);
+  const ann = client.state.channels.find((c) => c.name === 'announcements');
+  assert.equal(ann.type, 0);
+  assert.equal(client.state.guild.system_channel_id, null);
+  assert.equal(client.state.guild.explicit_content_filter, 2);
+
+  const again = await plan(client, merchantLike());
+  assert.deepEqual(again.ops.filter((o) => !o.gate), [], 'converged before Community');
+
+  client.state.guild.features.push('COMMUNITY');
+  const p2 = await plan(client, merchantLike());
+  const conv = p2.ops.find((o) => o.label.includes('announcements'));
+  assert.deepEqual(conv.details, ['type: text -> announcement']);
+  assert.equal(p2.manual.length, 0);
+  await apply(client, p2);
+  assert.equal(ann.id, client.state.channels.find((c) => c.name === 'announcements' && c.type === 5).id);
+  const rules = client.state.channels.find((c) => c.name === 'rules');
+  assert.equal(client.state.guild.rules_channel_id, rules.id);
+  assert.deepEqual((await plan(client, merchantLike())).ops.filter((o) => !o.gate), []);
+});
+
+test('forum tags are created, keep their ids across edits, and require-tag is set', async () => {
+  const client = createFakeDiscord();
+  await apply(client, await plan(client, merchantLike()));
+  const forum = client.state.channels.find((c) => c.name === 'orders');
+  assert.equal(forum.type, 15);
+  assert.equal(forum.flags & 16, 16);
+  assert.equal(forum.default_auto_archive_duration, 1440);
+  const bidId = forum.available_tags.find((t) => t.name === 'Bidding').id;
+
+  const cfg = merchantLike();
+  cfg.categories[1].channels[0].tags = [{ name: 'Bidding', moderated: true }, { name: 'Problem', moderated: true }];
+  const p = await plan(client, cfg);
+  const upd = p.ops.find((o) => o.label.includes('"orders"'));
+  assert.deepEqual(upd.details, ['tags: +Problem -Done']);
+  await apply(client, p);
+  assert.equal(forum.available_tags.find((t) => t.name === 'Bidding').id, bidId);
+  assert.deepEqual((await plan(client, cfg)).ops.filter((o) => !o.gate), []);
+});
+
+test('config validation checks guild settings and forum-only options', () => {
+  const cfg = merchantLike();
+  assert.deepEqual(validateConfig(cfg), []);
+  cfg.guild.rulesChannel = 'nope';
+  cfg.guild.verificationLevel = 'EXTREME';
+  cfg.categories[0].channels[0].tags = [{ name: 'x' }];
+  const errs = validateConfig(cfg);
+  assert.equal(errs.length, 3, errs.join('\n'));
+});
+
+test('managed bot roles can be placed in the hierarchy without being edited', async () => {
+  const client = createFakeDiscord();
+  client.state.roles.push({ id: '110000000000000009', name: 'OpsBot', color: 0, hoist: false, mentionable: false, managed: true, position: 1, permissions: '0' });
+  client.state.roles.find((r) => r.name === 'Server Manager').position = 2;
+  const cfg = { guildId: GUILD_ID, roles: [{ name: 'Boss' }, { name: 'OpsBot', managed: true }, { name: 'Member' }], ignore: { channels: ['general', 'General', 'Text Channels', 'Voice Channels'] } };
+  const p = await plan(client, cfg);
+  assert.ok(!p.warnings.some((w) => w.includes('OpsBot')));
+  assert.ok(!p.ops.some((o) => o.action === 'update' && o.label.includes('OpsBot')));
+  await apply(client, p);
+  const order = client.state.roles.filter((r) => ['Boss', 'OpsBot', 'Member'].includes(r.name)).sort((a, b) => b.position - a.position).map((r) => r.name);
+  assert.deepEqual(order, ['Boss', 'OpsBot', 'Member']);
+  assert.deepEqual((await plan(client, cfg)).ops.filter((o) => !o.gate), []);
 });

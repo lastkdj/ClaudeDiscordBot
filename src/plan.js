@@ -15,20 +15,37 @@
 // Gated ops (skipped on --apply unless the matching flag is passed):
 //   prune          -> deleting anything that is not in the config
 //   allow-everyone -> changing @everyone's server-wide permissions
+//
+// Community: bots cannot turn on the COMMUNITY feature (Discord requires
+// Administrator for that), so a config with "guild.community": true lists it
+// as a manual step for the owner. Until it is on, announcement channels are
+// created as text channels and converted on the next sync after it is enabled.
 
 import { ALL_KNOWN, toBits, fromBits, describeDiff } from './permissions.js';
-import { CHANNEL_TYPES, CHANNEL_TYPE_NAMES, VOICE_LIKE, normalizeChannelName } from './config.js';
+import {
+  CHANNEL_TYPES, CHANNEL_TYPE_NAMES, VOICE_LIKE, normalizeChannelName,
+  VERIFICATION_LEVELS, CONTENT_FILTERS, NOTIFICATION_LEVELS,
+} from './config.js';
 
 const colorInt = (hex) => (hex ? parseInt(hex.slice(1), 16) : 0);
 const colorHex = (n) => (n ? `#${n.toString(16).padStart(6, '0')}` : null);
 const byPosition = (a, b) => a.position - b.position || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
 const sortClass = (type) => (type === 2 || type === 13 ? 'voice' : 'text');
 const TEXT_LIKE = new Set(['text', 'announcement', 'forum']);
+const FORUM_REQUIRE_TAG = 1 << 4;
+const tagKey = (t) => `${t.name}|${!!t.moderated}|${t.emoji_name ?? t.emoji ?? ''}`;
 
 export function buildPlan(config, live) {
   const guildId = config.guildId;
   const ops = [];
   const warnings = [];
+  const manual = [];
+  const hasCommunity = (live.guild.features ?? []).includes('COMMUNITY');
+  if (config.guild?.community && !hasCommunity) {
+    manual.push('Enable Community (Server Settings -> Enable Community). Bots need Administrator for this, so the owner does it. ' +
+      `When the wizard asks, pick #${config.guild.rulesChannel ?? 'rules'} as the rules channel and ` +
+      `#${config.guild.publicUpdatesChannel ?? 'a staff-only channel'} for community updates, then run the plan again.`);
+  }
   const ignore = { roles: new Set(config.ignore?.roles ?? []), channels: new Set(config.ignore?.channels ?? []) };
 
   const roleById = new Map(live.roles.map((r) => [r.id, r]));
@@ -68,7 +85,8 @@ export function buildPlan(config, live) {
       claimedRoles.add(lr.id);
       roleIds.set(cr.name, lr.id);
       if (lr.managed) {
-        warnings.push(`role "${cr.name}" is managed by an integration/bot and cannot be edited; skipping`);
+        // "managed": true entries only pin the bot role's place in the hierarchy.
+        if (!cr.managed) warnings.push(`role "${cr.name}" is managed by an integration/bot and cannot be edited; skipping`);
         continue;
       }
       const changes = {};
@@ -95,6 +113,8 @@ export function buildPlan(config, live) {
         action: 'update', kind: 'role', label: `role "${cr.name}"`, details,
         run: (ctx) => ctx.client.patch(`/guilds/${guildId}/roles/${lr.id}`, changes, { reason: ctx.reason }),
       });
+    } else if (cr.managed) {
+      warnings.push(`role "${cr.name}" is marked managed but is not in the server (invite its bot first); ignoring it`);
     } else {
       const perms = grantable(toBits(cr.permissions ?? []), 0n, `role "${cr.name}"`);
       const body = { name: cr.name, permissions: perms.toString(), color: colorInt(cr.color), hoist: !!cr.hoist, mentionable: !!cr.mentionable };
@@ -137,7 +157,8 @@ export function buildPlan(config, live) {
     ];
     const planRoleIds = new Map([...roleIds, ...createdRoles.map((n) => [n, `new:${n}`])]);
     const botTop = live.botTop;
-    const canMove = (id) => id.startsWith('new:') || (roleById.get(id).position < botTop && !roleById.get(id).managed);
+    const managedOk = new Set((config.roles ?? []).filter((r) => r.managed).map((r) => r.name));
+    const canMove = (id) => id.startsWith('new:') || (roleById.get(id).position < botTop && (!roleById.get(id).managed || managedOk.has(roleById.get(id).name)));
     const current = predicted.map((r) => r.id).filter((id) => [...planRoleIds.values()].includes(id) && canMove(id));
     const desired = (config.roles ?? []).map((r) => planRoleIds.get(r.name)).filter((id) => id && current.includes(id));
     if (current.join() !== desired.join()) {
@@ -258,10 +279,65 @@ export function buildPlan(config, live) {
   }
   for (const ch of config.channels ?? []) planChannel(ch, null, undefined);
   ops.push(...channelOps);
+  planGuildSettings();
+
+  function findConfigChannel(name) {
+    const all = [...(config.categories ?? []).flatMap((c) => c.channels ?? []), ...(config.channels ?? [])];
+    return all.find((c) => normalizeChannelName(c.name, c.type ?? 'text') === name);
+  }
+
+  function planGuildSettings() {
+    const g = config.guild;
+    if (!g) return;
+    const lg = live.guild;
+    const body = {};
+    const details = [];
+    const setEnum = (key, apiKey, table) => {
+      if (g[key] === undefined) return;
+      const want = table[g[key]];
+      if (lg[apiKey] !== want) {
+        body[apiKey] = want;
+        const from = Object.keys(table).find((k) => table[k] === lg[apiKey]) ?? lg[apiKey];
+        details.push(`${key}: ${from} -> ${g[key]}`);
+      }
+    };
+    setEnum('verificationLevel', 'verification_level', VERIFICATION_LEVELS);
+    setEnum('explicitContentFilter', 'explicit_content_filter', CONTENT_FILTERS);
+    setEnum('defaultNotifications', 'default_message_notifications', NOTIFICATION_LEVELS);
+    const refs = [['systemChannel', 'system_channel_id']];
+    // Rules and community-updates channels only exist on Community servers.
+    if (hasCommunity) refs.push(['rulesChannel', 'rules_channel_id'], ['publicUpdatesChannel', 'public_updates_channel_id']);
+    const refObjs = {};
+    for (const [key, apiKey] of refs) {
+      if (g[key] === undefined) continue;
+      const obj = g[key] === null ? null : findConfigChannel(g[key]);
+      const curId = lg[apiKey] ?? null;
+      const knownId = obj ? ids.get(obj) : null;
+      if (obj === null ? curId !== null : knownId !== curId) {
+        refObjs[apiKey] = obj;
+        const curName = curId ? `#${liveById.get(curId)?.name ?? curId}` : 'none';
+        details.push(`${key}: ${curName} -> ${obj ? `#${g[key]}` : 'none'}`);
+      }
+    }
+    if (!details.length) return;
+    ops.push({
+      action: 'update', kind: 'guild', label: 'server settings', details,
+      run: (ctx) => {
+        const out = { ...body };
+        for (const [apiKey, obj] of Object.entries(refObjs)) {
+          out[apiKey] = obj ? ctx.ids.get(obj) : null;
+          if (obj && !out[apiKey]) throw new Error(`channel "${obj.name}" does not exist`);
+        }
+        return ctx.client.patch(`/guilds/${guildId}`, out, { reason: ctx.reason });
+      },
+    });
+  }
 
   function planChannel(ch, cat, inheritedOverwrites) {
     const typeName = ch.type ?? 'text';
-    const type = CHANNEL_TYPES[typeName];
+    // Announcement channels need Community; until then they exist as text.
+    const deferType = typeName === 'announcement' && !hasCommunity;
+    const type = deferType ? CHANNEL_TYPES.text : CHANNEL_TYPES[typeName];
     const name = normalizeChannelName(ch.name, typeName);
     const where = `${typeName} channel "${name}"${cat ? ` in "${cat.name}"` : ''}`;
     if (name !== ch.name) warnings.push(`${where}: Discord stores this name as "${name}"; consider using that in the config`);
@@ -272,7 +348,10 @@ export function buildPlan(config, live) {
     let lc = ch.id ? liveChans.find((c) => c.id === ch.id) : undefined;
     if (ch.id && !lc) warnings.push(`${where}: id ${ch.id} not found, matching by name`);
     if (!lc) {
-      const cands = liveChans.filter((c) => !claimedChannels.has(c.id) && c.type === type && c.name === name);
+      // text <-> announcement is a type change Discord allows in place.
+      const sameFamily = (t) => t === type || (hasCommunity && [0, 5].includes(t) && [0, 5].includes(type));
+      const cands = liveChans.filter((c) => !claimedChannels.has(c.id) && sameFamily(c.type) && c.name === name)
+        .sort((a, b) => (a.type === type ? 0 : 1) - (b.type === type ? 0 : 1));
       lc = cands.find((c) => !parentIsNew && (c.parent_id ?? null) === parentId) ?? (cands.length === 1 ? cands[0] : undefined);
     }
 
@@ -285,6 +364,8 @@ export function buildPlan(config, live) {
     if (ch.slowmode !== undefined) fields.rate_limit_per_user = ch.slowmode;
     if (VOICE_LIKE.has(typeName) && ch.userLimit !== undefined) fields.user_limit = ch.userLimit;
     if (VOICE_LIKE.has(typeName) && ch.bitrate !== undefined) fields.bitrate = ch.bitrate;
+    if (ch.defaultAutoArchive !== undefined) fields.default_auto_archive_duration = ch.defaultAutoArchive;
+    if (deferType && !lc) warnings.push(`${where}: created as a text channel until Community is enabled, then converted`);
 
     if (lc) {
       claimedChannels.add(lc.id);
@@ -297,10 +378,15 @@ export function buildPlan(config, live) {
         const from = lc.parent_id ? `"${liveById.get(lc.parent_id)?.name}"` : '(no category)';
         details.push(`move: ${from} -> ${cat ? `"${cat.name}"` : '(no category)'}`);
       }
+      if (lc.type !== type) {
+        body.type = type;
+        details.push(`type: ${CHANNEL_TYPE_NAMES[lc.type]} -> ${CHANNEL_TYPE_NAMES[type]}`);
+      }
       for (const [k, v] of Object.entries(fields)) {
-        const cur = k === 'topic' ? lc.topic || null : lc[k] ?? (k === 'nsfw' ? false : 0);
+        const cur = k === 'topic' ? lc.topic || null : lc[k] ?? (k === 'nsfw' ? false : k === 'default_auto_archive_duration' ? null : 0);
         if (cur !== v) { body[k] = v; details.push(`${k}: ${JSON.stringify(cur)} -> ${JSON.stringify(v)}`); }
       }
+      if (typeName === 'forum') diffForum(ch, lc, body, details);
       if (wantOw) {
         const d = diffOverwrites(wantOw, lc, where);
         if (d.details.length) { details.push(...d.details); body.__ow = d.final; }
@@ -313,7 +399,12 @@ export function buildPlan(config, live) {
       }
     } else {
       const final = wantOw ? diffOverwrites(wantOw, null, where).final : null;
-      const details = Object.entries(fields).map(([k, v]) => `${k}: ${JSON.stringify(v)}`);
+      if (typeName === 'forum') {
+        if (ch.tags) fields.available_tags = ch.tags.map(toApiTag);
+        if (ch.requireTag) fields.flags = FORUM_REQUIRE_TAG;
+      }
+      const details = Object.entries(fields).map(([k, v]) =>
+        k === 'available_tags' ? `tags: ${v.map((t) => t.name).join(', ')}` : k === 'flags' ? 'require tag: true' : `${k}: ${JSON.stringify(v)}`);
       if (final) {
         details.push(...[...final].map(([k, v]) => `overwrite ${owLabel(k)}: allow [${fromBits(v.allow).join(', ')}] deny [${fromBits(v.deny).join(', ')}]`));
       } else if (cat) {
@@ -331,6 +422,29 @@ export function buildPlan(config, live) {
           return c;
         },
       });
+    }
+  }
+
+  function diffForum(ch, lc, body, details) {
+    if (ch.tags !== undefined) {
+      const liveTags = lc.available_tags ?? [];
+      const want = ch.tags.map((t) => {
+        const existing = liveTags.find((l) => l.name === t.name);
+        return { ...(existing ? { id: existing.id } : {}), ...toApiTag(t) };
+      });
+      if (want.map(tagKey).join() !== liveTags.map(tagKey).join()) {
+        body.available_tags = want;
+        const added = want.filter((t) => !t.id).map((t) => t.name);
+        const removed = liveTags.filter((l) => !want.some((t) => t.id === l.id)).map((l) => l.name);
+        details.push(`tags: ${[...added.map((n) => `+${n}`), ...removed.map((n) => `-${n}`)].join(' ') || 'reorder/edit'}`);
+      }
+    }
+    if (ch.requireTag !== undefined) {
+      const cur = !!((lc.flags ?? 0) & FORUM_REQUIRE_TAG);
+      if (cur !== ch.requireTag) {
+        body.flags = ((lc.flags ?? 0) & ~FORUM_REQUIRE_TAG) | (ch.requireTag ? FORUM_REQUIRE_TAG : 0);
+        details.push(`require tag: ${cur} -> ${ch.requireTag}`);
+      }
     }
   }
 
@@ -412,14 +526,17 @@ export function buildPlan(config, live) {
     });
   }
 
-  return { ops, warnings, seed: { roleIds, ids } };
+  return { ops, warnings, manual, seed: { roleIds, ids } };
 }
 
 async function reorderRoles(ctx, config) {
   const roles = await ctx.client.get(`/guilds/${ctx.guildId}/roles`);
   const byId = new Map(roles.map((r) => [r.id, r]));
+  // Creating roles shifts the bot's own role up, so recompute its position.
+  const botTop = ctx.botRoleIds?.length ? Math.max(0, ...ctx.botRoleIds.map((id) => byId.get(id)?.position ?? 0)) : ctx.botTop;
+  const managedOk = new Set((config.roles ?? []).filter((r) => r.managed).map((r) => r.name));
   const wanted = (config.roles ?? []).map((r) => ctx.roleIds.get(r.name))
-    .filter((id) => id && byId.has(id) && !byId.get(id).managed && byId.get(id).position < ctx.botTop);
+    .filter((id) => id && byId.has(id) && (!byId.get(id).managed || managedOk.has(byId.get(id).name)) && byId.get(id).position < botTop);
   const current = roles.filter((r) => wanted.includes(r.id)).sort((a, b) => b.position - a.position || (a.id < b.id ? -1 : 1));
   if (current.map((r) => r.id).join() === wanted.join()) return 'already in order';
   const positions = current.map((r) => r.position);
@@ -466,13 +583,23 @@ function describeChannelOrder(config) {
 const SYMBOL = { create: '+', update: '~', delete: '-', reorder: '↕' };
 const GATE_FLAG = { prune: '--prune', 'allow-everyone': '--allow-everyone' };
 
-export function formatPlan({ ops, warnings }) {
+function toApiTag(t) {
+  const out = { name: t.name, moderated: !!t.moderated };
+  if (t.emoji) out.emoji_name = t.emoji;
+  return out;
+}
+
+export function formatPlan({ ops, warnings, manual = [] }) {
   const lines = [];
   if (!ops.length) lines.push('No changes: the server matches the config.');
   for (const op of ops) {
     const gate = op.gate ? `   [needs ${GATE_FLAG[op.gate]} + your confirmation]` : '';
     lines.push(`${SYMBOL[op.action]} ${op.action.toUpperCase()} ${op.label}${gate}`);
     for (const d of op.details ?? []) lines.push(`      ${d}`);
+  }
+  if (manual.length) {
+    lines.push('', 'Manual steps for the owner:');
+    for (const m of manual) lines.push(`  → ${m}`);
   }
   if (warnings.length) {
     lines.push('', 'Warnings:');

@@ -30,7 +30,7 @@ run(async () => {
 
   console.log('\nApplying...');
   const ctx = {
-    client, guildId, botTop: live.botTop,
+    client, guildId, botTop: live.botTop, botRoleIds: live.botMember.roles,
     reason: 'server-config.json sync',
     roleIds: new Map(plan.seed.roleIds),
     ids: new Map(plan.seed.ids),

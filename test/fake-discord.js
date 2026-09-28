@@ -14,6 +14,7 @@ export function createFakeDiscord() {
   let nextId = 300000000000000000n;
   const newId = () => String(nextId++);
   const state = {
+    guild: { features: [], verification_level: 0, explicit_content_filter: 0, default_message_notifications: 0, system_channel_id: '120000000000000002', rules_channel_id: null, public_updates_channel_id: null },
     roles: [
       { id: GUILD_ID, name: '@everyone', color: 0, hoist: false, mentionable: false, managed: false, position: 0, permissions: toBits(['VIEW_CHANNEL', 'SEND_MESSAGES', 'READ_MESSAGE_HISTORY', 'CONNECT', 'SPEAK']).toString() },
       { id: '110000000000000000', name: 'Server Manager', color: 0, hoist: false, mentionable: false, managed: true, position: 1, permissions: INVITE_A.toString() },
@@ -35,7 +36,14 @@ export function createFakeDiscord() {
     calls.push({ method, path, body });
     let m;
     if (method === 'GET' && path === `/guilds/${GUILD_ID}`) {
-      return { id: GUILD_ID, name: 'Test Guild', owner_id: '1', features: [], approximate_member_count: 3, roles: clone(state.roles) };
+      return { id: GUILD_ID, name: 'Test Guild', owner_id: '1', approximate_member_count: 3, ...clone(state.guild), roles: clone(state.roles) };
+    }
+    if (method === 'PATCH' && path === `/guilds/${GUILD_ID}`) {
+      if (('rules_channel_id' in body || 'public_updates_channel_id' in body) && !state.guild.features.includes('COMMUNITY')) {
+        throw new Error('fake discord: rules/public updates channels need COMMUNITY');
+      }
+      Object.assign(state.guild, body);
+      return clone(state.guild);
     }
     if (method === 'GET' && path === `/guilds/${GUILD_ID}/channels`) return clone(state.channels);
     if (method === 'GET' && path === `/guilds/${GUILD_ID}/roles`) return clone(state.roles);
@@ -64,6 +72,11 @@ export function createFakeDiscord() {
         permission_overwrites: body.permission_overwrites ?? (body.parent_id ? clone(channel(body.parent_id).permission_overwrites) : []),
       };
       if (c.type === 2) { c.user_limit ??= 0; c.bitrate ??= 64000; }
+      if (c.type === 5 && !state.guild.features.includes('COMMUNITY')) throw new Error('fake discord: announcement channels need COMMUNITY');
+      if (c.type === 15) {
+        c.flags ??= 0;
+        c.available_tags = (c.available_tags ?? []).map((t) => ({ id: newId(), emoji_id: null, emoji_name: null, ...t }));
+      }
       state.channels.push(c);
       return clone(c);
     }
@@ -73,7 +86,11 @@ export function createFakeDiscord() {
     }
     if ((m = path.match(/^\/channels\/(\d+)$/))) {
       const c = channel(m[1]) ?? notFound();
-      if (method === 'PATCH') { Object.assign(c, body); return clone(c); }
+      if (method === 'PATCH') {
+        if (body.available_tags) body.available_tags = body.available_tags.map((t) => ({ emoji_id: null, emoji_name: null, ...t, id: t.id ?? newId() }));
+        Object.assign(c, body);
+        return clone(c);
+      }
       if (method === 'DELETE') { state.channels.splice(state.channels.indexOf(c), 1); return clone(c); }
     }
     throw new Error(`fake discord: unhandled ${method} ${path}`);

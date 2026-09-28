@@ -5,6 +5,10 @@ import { isPermission } from './permissions.js';
 export const CHANNEL_TYPES = { text: 0, voice: 2, category: 4, announcement: 5, stage: 13, forum: 15 };
 export const CHANNEL_TYPE_NAMES = Object.fromEntries(Object.entries(CHANNEL_TYPES).map(([k, v]) => [v, k]));
 export const VOICE_LIKE = new Set(['voice', 'stage']);
+export const ARCHIVE_MINUTES = [60, 1440, 4320, 10080];
+export const VERIFICATION_LEVELS = { NONE: 0, LOW: 1, MEDIUM: 2, HIGH: 3, VERY_HIGH: 4 };
+export const CONTENT_FILTERS = { DISABLED: 0, MEMBERS_WITHOUT_ROLES: 1, ALL_MEMBERS: 2 };
+export const NOTIFICATION_LEVELS = { ALL_MESSAGES: 0, ONLY_MENTIONS: 1 };
 
 // Discord lowercases text-like channel names and replaces spaces with dashes.
 export function normalizeChannelName(name, type) {
@@ -43,6 +47,9 @@ export function validateConfig(config) {
     roleNames.add(r.name);
     if (r.color != null && !/^#[0-9a-f]{6}$/i.test(r.color)) errors.push(`${where}: color must be "#rrggbb" or null`);
     checkPerms(where, r.permissions, r.allowAdministrator === true);
+    if (r.managed && ['permissions', 'color', 'hoist', 'mentionable'].some((k) => r[k] !== undefined)) {
+      errors.push(`${where}: a "managed" (bot) role only sets its position; remove the other fields`);
+    }
   }
   if (config.everyone) checkPerms('everyone', config.everyone.permissions, false);
 
@@ -74,9 +81,24 @@ export function validateConfig(config) {
       if (c.userLimit != null && !(Number.isInteger(c.userLimit) && c.userLimit >= 0 && c.userLimit <= 99)) {
         errors.push(`${w}: userLimit must be 0-99`);
       }
+      if (c.defaultAutoArchive != null && !ARCHIVE_MINUTES.includes(c.defaultAutoArchive)) {
+        errors.push(`${w}: defaultAutoArchive must be one of ${ARCHIVE_MINUTES.join(', ')} minutes`);
+      }
+      if ((c.tags !== undefined || c.requireTag !== undefined) && type !== 'forum') errors.push(`${w}: tags/requireTag are only valid on forum channels`);
+      if (c.tags !== undefined) {
+        if (!Array.isArray(c.tags) || c.tags.length > 20) errors.push(`${w}: tags must be an array of at most 20`);
+        const tagNames = new Set();
+        for (const t of c.tags ?? []) {
+          if (!t?.name || t.name.length > 20) errors.push(`${w}: each tag needs a name of 1-20 characters`);
+          if (tagNames.has(t?.name)) errors.push(`${w}: duplicate tag "${t?.name}"`);
+          tagNames.add(t?.name);
+        }
+      }
       checkOverwrites(w, c.overwrites);
+      allChannelNames.add(normalizeChannelName(c.name ?? '', type));
     }
   };
+  const allChannelNames = new Set();
 
   const catNames = new Set();
   for (const [i, cat] of (config.categories ?? []).entries()) {
@@ -88,5 +110,19 @@ export function validateConfig(config) {
     checkChannels(w, cat.channels);
   }
   checkChannels('(uncategorized)', config.channels);
+
+  const g = config.guild;
+  if (g !== undefined) {
+    const enumCheck = (key, table) => {
+      if (g[key] !== undefined && !Object.hasOwn(table, g[key])) errors.push(`guild.${key} must be one of ${Object.keys(table).join(', ')}`);
+    };
+    enumCheck('verificationLevel', VERIFICATION_LEVELS);
+    enumCheck('explicitContentFilter', CONTENT_FILTERS);
+    enumCheck('defaultNotifications', NOTIFICATION_LEVELS);
+    if (g.community !== undefined && typeof g.community !== 'boolean') errors.push('guild.community must be true or false');
+    for (const key of ['rulesChannel', 'publicUpdatesChannel', 'systemChannel']) {
+      if (g[key] != null && !allChannelNames.has(g[key])) errors.push(`guild.${key}: channel "${g[key]}" is not in the config`);
+    }
+  }
   return errors;
 }
