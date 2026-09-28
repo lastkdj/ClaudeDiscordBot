@@ -8,3 +8,4 @@ node_modules/
 __pycache__/
 *.log
 .state/
+merchant/node_modules/
