@@ -2,6 +2,14 @@
 
 Structural changes applied to the Discord server, newest first.
 
+## 2026-09-28 — TheMerchant implementation and structure plan (no server changes)
+
+- Owner instruction: "proceed with the plan, implement it fully". Q1–Q13 weren't answered individually, so the proposal's suggested answers were used. They are still to be confirmed.
+- `server-config.json` replaced with the §1–3 tree: 14 roles (Executive, Manager and Staff placed above TheMerchant), 10 categories, 40 channels, forum status tags, server settings. Dry run: 62 create, 2 update, 2 reorder, 4 delete (5 gated: 4 prunes of the Discord defaults and 1 @everyone change). Not applied.
+- Manual step for the owner before or after the first apply: enable Community (bots need Administrator for it).
+- Sync tool extended: Community-aware announcement channels, forum tags / require-tag / auto-archive, server settings, managed bot-role placement, and a fix for role reordering after creating roles. New read-only `npm run audit`.
+- TheMerchant built in `merchant/` (bot, webhook API, worker, PostgreSQL schema, 353 tests). Not deployed, and no connection to Discord was made.
+
 ## 2026-09-28 — read-only verification (no server changes)
 
 - Environment: DISCORD_TOKEN, DISCORD_GUILD_ID and MERCHANT_DISCORD_TOKEN all set.

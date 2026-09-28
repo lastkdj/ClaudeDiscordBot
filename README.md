@@ -20,6 +20,7 @@ the Discord REST API. Node 20+, no dependencies.
 | `node scripts/sync.js --apply` | Applies non-destructive changes, then logs them in `CHANGELOG.md`. |
 | `... --apply --prune` | Also deletes channels, categories and roles that aren't in the config. |
 | `... --apply --allow-everyone` | Also changes `@everyone`'s server-wide permissions. |
+| `npm run audit` | Read-only permission audit of the live server (no Administrator anywhere, bot limits, private categories hidden, provider isolation, config in sync). |
 | `npm test` | Runs the tests against an in-memory fake Discord API. |
 
 ## Config format
@@ -51,6 +52,9 @@ the Discord REST API. Node 20+, no dependencies.
 ```
 
 - **Channel types:** `text` (the default), `voice`, `announcement`, `stage`, `forum`.
+- **Forum and thread options:** `tags` (forum only, up to 20, e.g. `{ "name": "Bidding", "emoji": "🪙", "moderated": true }`; existing tags keep their ids), `requireTag` (forum only), `defaultAutoArchive` (60, 1440, 4320 or 10080 minutes).
+- **Server settings** (`"guild"` block): `community`, `verificationLevel` (`NONE`…`VERY_HIGH`), `explicitContentFilter`, `defaultNotifications`, and `rulesChannel` / `publicUpdatesChannel` / `systemChannel` by channel name. Bots need Administrator to turn Community on, so when `community` is true and it's off, the plan lists it as a manual step for the owner. Until then, `announcement` channels are created as text channels and converted on the next sync.
+- **Bot roles:** a role entry with only `"name"` and `"managed": true` places a bot's managed role in the hierarchy without editing it.
 - **Channel fields:** `topic`, `slowmode` (seconds), `nsfw`, `userLimit` and `bitrate` (voice only), `overwrites`.
 - **Overwrites:** each entry is `{ "role": "<name>" | "@everyone", allow, deny }` or `{ "member": "<user id>", allow, deny }`.
   A channel without `overwrites` inherits its category's overwrites. If neither is set, overwrites are left as they are.

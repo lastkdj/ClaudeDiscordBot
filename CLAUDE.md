@@ -37,8 +37,17 @@ README.md for the commands and config format.
   owner to turn it off.
 - The owner manages the server entirely through Claude Code chat. Make no
   Discord changes until the owner instructs, even non-destructive ones.
-- Project: TheMerchant shop operations system. Proposal in
-  `docs/ARCHITECTURE.md`, awaiting owner approval. Two bots: ClaudeBot
-  (structure, this repo's sync tool) and TheMerchant (operations bot, to be
-  built under `merchant/`). `server-config.json` holds an earlier gaming
-  draft that will be replaced by the §1 tree once approved. Never apply it.
+- Project: TheMerchant shop operations system. Proposal in `docs/ARCHITECTURE.md`.
+  On 2026-09-28 the owner said "proceed with the plan, implement it fully"
+  without answering Q1–Q13 individually. Everything was built against the
+  proposal's own suggested answers. Confirm them with the owner, and update
+  ARCHITECTURE.md only once they have answered.
+- `server-config.json` now holds the §1–3 tree (the gaming draft is gone). It
+  has been dry-run but NOT applied. Applying needs the owner's go-ahead on the
+  plan, then separate confirmations for `--allow-everyone` (tightens @everyone)
+  and `--prune` (deletes the default #general / General / categories).
+  Community must be enabled by the owner by hand (bots need Administrator).
+- TheMerchant code is in `merchant/` (see merchant/README.md). It has not been
+  deployed and has never connected to Discord. Don't start the bot, register
+  commands (`--apply`) or run anything that posts to Discord until the owner
+  says so. Tests use a local Postgres and never touch Discord.
