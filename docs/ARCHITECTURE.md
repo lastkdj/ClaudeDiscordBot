@@ -40,7 +40,7 @@ PROVIDER REPUTATION UPDATE  (global / game / service; level review)
 
 ## 0. Two bots, two jobs
 
-| | **ClaudeBot** (exists) | **TheMerchant** (to build) |
+| | **ClaudeBot** (exists) | **TheMerchant** (to build, app `1554254355644026910`) |
 |---|---|---|
 | Purpose | Manages the server's **structure** from this repo, following your instructions in Claude Code chat | Runs the shop's **operations** 24/7 |
 | How it runs | On demand, over REST: `server-config.json`, then dry run, then apply | Always-on gateway bot, plus a webhook API and background jobs |

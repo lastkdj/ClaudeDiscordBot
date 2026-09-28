@@ -1,7 +1,8 @@
 # Discord server manager: working rules
 
 This repo manages the user's Discord server (guild `1554075315104514120`,
-bot application `1554075562430169151`) from `server-config.json`. See
+bot application `1554075562430169151`; TheMerchant
+operations bot application `1554254355644026910`) from `server-config.json`. See
 README.md for the commands and config format.
 
 ## Rules of engagement (from the owner, always apply)
