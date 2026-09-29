@@ -48,19 +48,23 @@ README.md for the commands and config format.
   **Never write to "MyGold US Production" or "MyGold US Developer".** Check the
   project id before any write. New migrations must also insert their file
   name into `schema_migrations` when applied through the connector.
-- TheMerchant (app `1554254355644026910`) is built in `merchant/` but not
-  deployed, and it has never connected to Discord. Don't start the bot,
-  register commands (`--apply`) or run anything that posts to Discord until
-  the owner says so. Tests use a local Postgres and never touch Discord.
-- Hosting (2026-09-29): Railway, free plan (a 30-day $5 trial, then $1/month;
-  expect to move to Hobby at $5/month around go-live, and ask the owner first
-  because it costs money). One service, "ClaudeDiscordBot": GitHub repo, branch
-  `claude/eloquent-volta-houcu6`, root directory `merchant` (Dockerfile),
-  region EU West, healthcheck `/health`, no public domain. It deliberately has
-  no `MERCHANT_DISCORD_TOKEN`, so it stops at startup until the owner says go.
-  Claude manages it through Railway's GraphQL API
+- TheMerchant (app `1554254355644026910`) is live on Railway since
+  2026-09-29 15:57 UTC. The owner added `MERCHANT_DISCORD_TOKEN` themselves.
+  Deploy `d4b83606` passed its healthcheck and logged "TheMerchant ready".
+  Still open: slash commands (`npm run register-commands`, show the list,
+  `--apply` only on the owner's go), confirm the Message Content intent is
+  off, set `PAYOUT_ENC_KEY` (payout details can't be saved without it), and
+  consider removing `DISCORD_TOKEN` from Railway (TheMerchant doesn't use it).
+  Tests use a local Postgres and never touch Discord.
+- Hosting: Railway, free plan (a 30-day $5 trial, then $1/month; expect to
+  move to Hobby at $5/month, and ask the owner first because it costs money).
+  Project token scope: production. One service, "ClaudeDiscordBot": GitHub
+  repo, branch `claude/eloquent-volta-houcu6`, root directory `/merchant`
+  (Dockerfile), region europe-west4, healthcheck `/health`, no public domain,
+  sleep-when-idle on. Claude reads it through Railway's GraphQL API
   (`https://backboard.railway.com/graphql/v2`, header
-  `Project-Access-Token: $RAILWAY_TOKEN`), a project token scoped to
-  production. Never print it. Going live, registering commands, plan changes
-  and deletions need the owner's explicit go.
+  `Project-Access-Token: $RAILWAY_TOKEN`). Never print it. Writing variables
+  through the API is blocked by the session's permission check, so the owner
+  sets them in the dashboard. Plan changes and deletions need the owner's
+  explicit go.
 - MyGold.gg is on hold until the owner has its API/webhook details.

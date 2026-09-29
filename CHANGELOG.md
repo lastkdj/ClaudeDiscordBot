@@ -2,6 +2,16 @@
 
 Structural changes applied to the Discord server, newest first.
 
+## 2026-09-29 — TheMerchant deployed on Railway (variables set by the owner)
+
+No Discord structure changes. Railway service "ClaudeDiscordBot" (project `bb3043a1-…`, production).
+
+- Service settings: branch `claude/eloquent-volta-houcu6`, root directory `/merchant`, build from `merchant/Dockerfile` (the dashboard default shows Railpack, but the deploy manifest uses DOCKERFILE), region europe-west4 (EU West), healthcheck `/health`, restart on failure (10 retries), sleep-when-idle on.
+- Earlier deploys (08:53, 15:03, 15:10 and 15:29 UTC) built fine but crashed at startup with `DATABASE_URL … received undefined`: the service had no app variables at all, only Railway's built-ins. No secrets appeared in those logs.
+- Claude's attempt to copy the variables through the API was blocked by the session's permission check. The owner then set them in the Railway dashboard: `DATABASE_URL`, `DISCORD_GUILD_ID`, `OWNER_DISCORD_ID`, `MERCHANT_APPLICATION_ID`, `MERCHANT_DISCORD_TOKEN`, and also `DISCORD_TOKEN` (ClaudeBot's token, which TheMerchant doesn't use).
+- Deploy `d4b83606` (commit `c4d9213`, 15:57 UTC): SUCCESS. Healthcheck passed, "API listening", "TheMerchant ready" (gateway connected, database reachable). Warning: `PAYOUT_ENC_KEY` is not set, so providers can't save payout details yet.
+- Not verified from here (read-only Discord checks were blocked by the session's permission check): whether slash commands are registered, whether the Message Content intent is off, and which panels the bot posted on startup.
+
 ## 2026-09-29 — TheMerchant database set up (Supabase project "TheMerchant")
 
 No Discord changes. Database only, on Supabase project `gkfqbthkfwefubfzlqxk` ("TheMerchant", eu-west-1, its own organization). The project id was checked before each write. Nothing was written to "MyGold US Production" or "MyGold US Developer".
