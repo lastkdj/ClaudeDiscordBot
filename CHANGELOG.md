@@ -2,6 +2,21 @@
 
 Structural changes applied to the Discord server, newest first.
 
+## 2026-09-29 — TheMerchant database set up (Supabase project "TheMerchant")
+
+No Discord changes. Database only, on Supabase project `gkfqbthkfwefubfzlqxk` ("TheMerchant", eu-west-1, its own organization). The project id was checked before each write. Nothing was written to "MyGold US Production" or "MyGold US Developer".
+
+- The Supabase connector reaches the project by id, although it isn't in the connector's project list. Migrations were applied through it: `001_init`, `002_schedule_runs`, `003_row_level_security`, then the new `004_supabase_advisors`. Each one also records itself in `schema_migrations`, so the bot's own migrator sees them as done on startup.
+- Catalog loaded: 4 games, 13 versions, 49 categories, 55 services and 4 scoring profiles. The SQL was generated from `seed.ts`'s data and checked against a real `npm run seed` on a local Postgres (identical rows). It is idempotent.
+- Verified: 45 tables in `public`, RLS on for all of them, and no grants left for `anon` or `authenticated`.
+- Advisor fixes (migration `004_supabase_advisors.sql`, which also runs on plain Postgres):
+  - security: pinned `search_path` on `touch_updated_at()` and `forbid_mutation()`;
+  - security: revoked EXECUTE on Supabase's `rls_auto_enable()` event-trigger function from anon/authenticated/PUBLIC (the trigger still fires);
+  - security (hardening): revoked all anon/authenticated privileges on public tables, sequences and functions, including defaults for new objects;
+  - performance: added covering indexes for all 58 foreign keys that lacked one (the advisor's 53, plus 5 that only had partial indexes).
+- Remaining advisor notices are INFO only and expected: "RLS enabled, no policy" (deliberate: deny-all for the Data API; the bot connects as the owner) and "unused index" (the database has had no traffic yet).
+- Tests: root 11/11; merchant typecheck clean, 359/359 (including 13 integration tests on a local Postgres 16).
+
 ## 2026-09-29 — structure completed (owner: "make all the changes")
 
 - The owner gave ClaudeBot Administrator. With it, the sync enabled Community itself (rules: #rules; community updates: #system-alerts).

@@ -28,33 +28,29 @@ README.md for the commands and config format.
 
 ## Status
 
-- Bot invited with option (a): the requested permissions plus
-  READ_MESSAGE_HISTORY, ADD_REACTIONS, ATTACH_FILES, EMBED_LINKS, CONNECT, SPEAK.
-  No Administrator.
-- Inspect done (2026-09-28): server is still Discord defaults. The ClaudeBot
-  role no longer has Administrator but holds 47 perms, more than option (a)
-  (see ARCHITECTURE Q13). TheMerchant's Message Content intent was found ON;
-  owner to turn it off.
+- 2026-09-29: the server structure from `server-config.json` is fully applied
+  (roles, categories, 40 channels, Community on, @everyone tightened). Only
+  `--prune` is outstanding. The owner will remove the default #general /
+  General / their categories by hand, so don't run it.
+- ClaudeBot has Administrator (owner's choice, ARCHITECTURE Q13). Recommend
+  removing it once setup settles.
 - The owner manages the server entirely through Claude Code chat. Make no
   Discord changes until the owner instructs, even non-destructive ones.
-- Project: TheMerchant shop operations system. Proposal in `docs/ARCHITECTURE.md`.
-  On 2026-09-28 the owner said "proceed with the plan, implement it fully"
-  without answering Q1–Q13 individually. Everything was built against the
-  proposal's own suggested answers. Confirm them with the owner, and update
-  ARCHITECTURE.md only once they have answered.
-- 2026-09-29: owner approved the plan and said to make all changes without
-  waiting. Structure fully applied except `--prune` (blocked by the session
-  permission check; default #general etc. remain). ClaudeBot has Administrator
-  again (owner's choice). Owner answers are recorded in ARCHITECTURE.md
-  "Decisions". Marketplace is MyGold.gg (details to come).
-- Supabase: only "MyGold US Production/Developer" projects are visible from
-  here. Never write TheMerchant tables into those; wait for the owner to
-  identify the TheMerchant database.
-- `server-config.json` holds the §1–3 tree (the gaming draft is gone). Applying needs the owner's go-ahead on the
-  plan, then separate confirmations for `--allow-everyone` (tightens @everyone)
-  and `--prune` (deletes the default #general / General / categories).
-  Community must be enabled by the owner by hand (bots need Administrator).
-- TheMerchant code is in `merchant/` (see merchant/README.md). It has not been
-  deployed and has never connected to Discord. Don't start the bot, register
-  commands (`--apply`) or run anything that posts to Discord until the owner
-  says so. Tests use a local Postgres and never touch Discord.
+  Owner answers are in ARCHITECTURE.md "Decisions". Only answered questions
+  are marked approved.
+- Marketplace: MyGold.gg (API/webhook details to come; manual `/order import`
+  until then).
+- Database: Supabase project "TheMerchant", id `gkfqbthkfwefubfzlqxk`
+  (eu-west-1, own organization). Migrations 001–004 are applied and the
+  catalog is seeded (2026-09-29), and the advisors are clean apart from
+  expected INFO notices. The Supabase connector reaches it by id only (it's
+  not in the project list), and `DATABASE_URL` points at its session pooler.
+  **Never write to "MyGold US Production" or "MyGold US Developer".** Check the
+  project id before any write. New migrations must also insert their file
+  name into `schema_migrations` when applied through the connector.
+- TheMerchant (app `1554254355644026910`) is built in `merchant/` but not
+  deployed, and it has never connected to Discord. Don't start the bot,
+  register commands (`--apply`) or run anything that posts to Discord until
+  the owner says so. Tests use a local Postgres and never touch Discord.
+- Environment variables not yet set: `PAYOUT_ENC_KEY`, `OWNER_DISCORD_ID` and
+  `MARKETPLACE_NAME`.
