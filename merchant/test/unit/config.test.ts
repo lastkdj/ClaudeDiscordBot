@@ -25,6 +25,10 @@ describe('DATABASE_SSL_CA parsing', () => {
     expect(readCa(PEM.replace(/\n/g, ''))).toBe(canonical);
     expect(readCa(`"${PEM.replace(/\n/g, ' ')}"`)).toBe(canonical);
   });
+  it('accepts only the base64 body, without the BEGIN/END lines', () => {
+    const body = PEM.split('\n').slice(1, -1).join('');
+    expect(readCa(body)).toBe(canonical);
+  });
   it('rejects text with no certificate block', () => {
     expect(() => readCa('-----BEGIN CERTIFICATE----- nope')).toThrow(/could not find/);
   });

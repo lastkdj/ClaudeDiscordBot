@@ -106,11 +106,16 @@ function passwordOf(url: string): string | undefined {
 }
 
 /**
- * Accepts the certificate as a file path or as PEM text in any shape a settings
- * screen allows: multi-line, one line with spaces, "\n" escapes, or quoted.
+ * Accepts the certificate as a file path, as PEM text in any shape a settings
+ * screen allows (multi-line, one line with spaces, "\n" escapes, quoted), or
+ * as just the base64 body between the BEGIN/END lines.
  */
 export function readCa(value: string): string {
   const v = value.trim().replace(/^(['"])(.*)\1$/s, '$2');
+  // Just the base64 body (no BEGIN/END lines, no spaces): the easiest form for KEY=value fields.
+  if (!v.includes('BEGIN CERTIFICATE') && v.length > 200 && /^[A-Za-z0-9+/=\s]+$/.test(v)) {
+    return readCa(`-----BEGIN CERTIFICATE-----${v}-----END CERTIFICATE-----`);
+  }
   if (!v.includes('BEGIN CERTIFICATE')) return readFileSync(v, 'utf8');
   const blocks = [...v.matchAll(/-----BEGIN CERTIFICATE-----(.*?)-----END CERTIFICATE-----/gs)];
   if (!blocks.length) throw new Error('DATABASE_SSL_CA: could not find the certificate between the BEGIN/END lines');
