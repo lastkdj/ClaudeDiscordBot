@@ -79,7 +79,7 @@ export function loadConfig({ requireDiscord = true }: { requireDiscord?: boolean
     ownerDiscordId: env.OWNER_DISCORD_ID ?? null,
     databaseUrl: env.DATABASE_URL,
     databaseSsl: env.DATABASE_SSL || !!env.DATABASE_SSL_CA,
-    databaseCa: env.DATABASE_SSL_CA ? (env.DATABASE_SSL_CA.includes('BEGIN CERTIFICATE') ? env.DATABASE_SSL_CA.replace(/\\n/g, '\n') : readFileSync(env.DATABASE_SSL_CA, 'utf8')) : null,
+    databaseCa: env.DATABASE_SSL_CA ? readCa(env.DATABASE_SSL_CA) : null,
     payoutKey,
     marketplace: {
       name: env.MARKETPLACE_NAME,
@@ -103,4 +103,21 @@ function passwordOf(url: string): string | undefined {
   } catch {
     return undefined;
   }
+}
+
+/**
+ * Accepts the certificate as a file path or as PEM text in any shape a settings
+ * screen allows: multi-line, one line with spaces, "\n" escapes, or quoted.
+ */
+export function readCa(value: string): string {
+  const v = value.trim().replace(/^(['"])(.*)\1$/s, '$2');
+  if (!v.includes('BEGIN CERTIFICATE')) return readFileSync(v, 'utf8');
+  const blocks = [...v.matchAll(/-----BEGIN CERTIFICATE-----(.*?)-----END CERTIFICATE-----/gs)];
+  if (!blocks.length) throw new Error('DATABASE_SSL_CA: could not find the certificate between the BEGIN/END lines');
+  return blocks
+    .map((m) => {
+      const body = m[1]!.replace(/\\n|\s/g, '');
+      return `-----BEGIN CERTIFICATE-----\n${body.match(/.{1,64}/g)!.join('\n')}\n-----END CERTIFICATE-----\n`;
+    })
+    .join('');
 }
