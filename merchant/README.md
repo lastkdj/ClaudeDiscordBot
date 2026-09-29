@@ -23,7 +23,7 @@ test/integration full lifecycle and webhooks against a real Postgres
 
 ## Setup
 
-1. **Database.** Create a PostgreSQL 16 database. Supabase is the default choice (Q10). Put its connection string in `DATABASE_URL`. For least privilege, run `src/db/app-role.sql` once as an admin and point the app at the `merchant_app` role.
+1. **Database.** Create a PostgreSQL 16+ database. Supabase is the default choice (Q10); use its **Session pooler** connection string as `DATABASE_URL`. For Supabase, TLS and Supabase's root certificate (`certs/supabase-root-2021.crt`, valid until 2031) are applied automatically. For another provider, set `DATABASE_SSL=true`, plus `DATABASE_SSL_CA` if its certificate isn't publicly trusted. For least privilege, run `src/db/app-role.sql` once as an admin and point the app at the `merchant_app` role.
 2. **Environment.** Copy `.env.example` to `.env` (gitignored) or set the values in your host's secret store. Generate the payout key with `openssl rand -hex 32`, and set `OWNER_DISCORD_ID` to your Discord user id.
 3. **Install and migrate:** `npm ci`, `npm run migrate`, `npm run seed`. On start, `main.ts` also migrates and seeds, and both steps are idempotent.
 4. **Slash commands:** `npm run register-commands` shows the list. `npm run register-commands -- --apply` registers them in the guild.

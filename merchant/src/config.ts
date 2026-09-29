@@ -1,7 +1,8 @@
 // Runtime configuration from the environment (or a gitignored .env).
 // Secrets are read here and nowhere else; logs redact them (see logger.ts).
 import { existsSync, readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
 
 function loadDotEnv(): void {
@@ -78,8 +79,9 @@ export function loadConfig({ requireDiscord = true }: { requireDiscord?: boolean
     guildId: env.DISCORD_GUILD_ID ?? null,
     ownerDiscordId: env.OWNER_DISCORD_ID ?? null,
     databaseUrl: env.DATABASE_URL,
-    databaseSsl: env.DATABASE_SSL || !!env.DATABASE_SSL_CA,
-    databaseCa: env.DATABASE_SSL_CA ? readCa(env.DATABASE_SSL_CA) : null,
+    // Supabase databases need TLS with Supabase's own root CA, which ships in certs/.
+    databaseSsl: env.DATABASE_SSL || !!env.DATABASE_SSL_CA || isSupabase(env.DATABASE_URL),
+    databaseCa: env.DATABASE_SSL_CA ? readCa(env.DATABASE_SSL_CA) : isSupabase(env.DATABASE_URL) ? SUPABASE_CA() : null,
     payoutKey,
     marketplace: {
       name: env.MARKETPLACE_NAME,
@@ -126,3 +128,15 @@ export function readCa(value: string): string {
     })
     .join('');
 }
+
+/** Direct (db.<ref>.supabase.co) and pooler (*.pooler.supabase.com) hosts. */
+export function isSupabase(url: string): boolean {
+  try {
+    return /(^|\.)supabase\.(co|com)$/.test(new URL(url).hostname);
+  } catch {
+    return false;
+  }
+}
+
+/** Supabase Root 2021 CA (public; valid until 2031-04-26). */
+const SUPABASE_CA = () => readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '..', 'certs', 'supabase-root-2021.crt'), 'utf8');

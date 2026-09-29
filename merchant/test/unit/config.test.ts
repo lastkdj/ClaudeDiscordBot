@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { readCa } from '../../src/config.js';
+import { X509Certificate } from 'node:crypto';
+import { isSupabase, loadConfig, readCa } from '../../src/config.js';
 
 // A throwaway self-signed certificate (public data, used only to test parsing).
 const PEM = `-----BEGIN CERTIFICATE-----
@@ -31,5 +32,29 @@ describe('DATABASE_SSL_CA parsing', () => {
   });
   it('rejects text with no certificate block', () => {
     expect(() => readCa('-----BEGIN CERTIFICATE----- nope')).toThrow(/could not find/);
+  });
+});
+
+describe('Supabase defaults', () => {
+  it('recognizes direct and pooler hosts only', () => {
+    expect(isSupabase('postgresql://postgres:x@db.gkfqbthkfwefubfzlqxk.supabase.co:5432/postgres')).toBe(true);
+    expect(isSupabase('postgresql://postgres.gkfqbthkfwefubfzlqxk:x@aws-0-eu-west-1.pooler.supabase.com:5432/postgres')).toBe(true);
+    expect(isSupabase('postgres://u:p@localhost:5432/db')).toBe(false);
+    expect(isSupabase('postgres://u:p@notsupabase.co.evil.com/db')).toBe(false);
+  });
+  it('turns on TLS with the bundled root CA for Supabase URLs', () => {
+    const saved = { ...process.env };
+    try {
+      process.env.DATABASE_URL = 'postgresql://postgres.ref:pw-123456@aws-0-eu-west-1.pooler.supabase.com:5432/postgres';
+      delete process.env.DATABASE_SSL;
+      delete process.env.DATABASE_SSL_CA;
+      const cfg = loadConfig({ requireDiscord: false });
+      expect(cfg.databaseSsl).toBe(true);
+      const cert = new X509Certificate(cfg.databaseCa!);
+      expect(cert.subject).toContain('CN=Supabase Root 2021 CA');
+      expect(cert.ca).toBe(true);
+    } finally {
+      process.env = saved;
+    }
   });
 });
