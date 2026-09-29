@@ -28,7 +28,7 @@ export async function migrate(db: Db, log: (m: string) => void = () => {}): Prom
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   const { loadConfig } = await import('../config.js');
   const cfg = loadConfig({ requireDiscord: false });
-  const db = createDb(cfg.databaseUrl, { ssl: cfg.databaseSsl });
+  const db = createDb(cfg.databaseUrl, { ssl: cfg.databaseSsl, ca: cfg.databaseCa });
   const applied = await migrate(db, console.log);
   console.log(applied.length ? `${applied.length} migration(s) applied` : 'database is up to date');
   await db.close();

@@ -42,11 +42,14 @@ README.md for the commands and config format.
   without answering Q1–Q13 individually. Everything was built against the
   proposal's own suggested answers. Confirm them with the owner, and update
   ARCHITECTURE.md only once they have answered.
-- 2026-09-29: owner approved the plan; first apply done (see CHANGELOG). 18
-  channels failed on permissions; the config fix (wider ClaudeBot category
-  overwrite) is dry-run only and waits for the owner. TheMerchant still sits
-  above Executive/Manager/Staff. Marketplace (Q8) is MyGold.gg; more context
-  to come from the owner.
+- 2026-09-29: owner approved the plan and said to make all changes without
+  waiting. Structure fully applied except `--prune` (blocked by the session
+  permission check; default #general etc. remain). ClaudeBot has Administrator
+  again (owner's choice). Owner answers are recorded in ARCHITECTURE.md
+  "Decisions". Marketplace is MyGold.gg (details to come).
+- Supabase: only "MyGold US Production/Developer" projects are visible from
+  here. Never write TheMerchant tables into those; wait for the owner to
+  identify the TheMerchant database.
 - `server-config.json` holds the §1–3 tree (the gaming draft is gone). Applying needs the owner's go-ahead on the
   plan, then separate confirmations for `--allow-everyone` (tightens @everyone)
   and `--prune` (deletes the default #general / General / categories).

@@ -846,7 +846,6 @@
           "name": "wow-orders",
           "type": "forum",
           "topic": "WoW orders: one post per order. Tags show the status.",
-          "requireTag": true,
           "defaultAutoArchive": 10080,
           "tags": [
             {
@@ -1226,7 +1225,6 @@
           "name": "albion-orders",
           "type": "forum",
           "topic": "Albion orders: one post per order. Tags show the status.",
-          "requireTag": true,
           "defaultAutoArchive": 10080,
           "tags": [
             {
@@ -1606,7 +1604,6 @@
           "name": "rs-orders",
           "type": "forum",
           "topic": "RuneScape orders: one post per order. Tags show the status.",
-          "requireTag": true,
           "defaultAutoArchive": 10080,
           "tags": [
             {
@@ -1986,7 +1983,6 @@
           "name": "diablo-orders",
           "type": "forum",
           "topic": "Diablo orders: one post per order. Tags show the status.",
-          "requireTag": true,
           "defaultAutoArchive": 10080,
           "tags": [
             {
@@ -2469,7 +2465,6 @@
           "name": "provider-applications",
           "type": "forum",
           "topic": "One post per provider application, tagged by game.",
-          "requireTag": true,
           "defaultAutoArchive": 10080,
           "tags": [
             {

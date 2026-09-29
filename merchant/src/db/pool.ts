@@ -12,11 +12,12 @@ export interface Db extends Q {
   close(): Promise<void>;
 }
 
-export function createDb(connectionString: string, opts: { max?: number; ssl?: boolean } = {}): Db {
+export function createDb(connectionString: string, opts: { max?: number; ssl?: boolean; ca?: string | null } = {}): Db {
   const pool = new pg.Pool({
     connectionString,
     max: opts.max ?? 10,
-    ssl: opts.ssl ? { rejectUnauthorized: true } : undefined,
+    // Certificates are always verified; pass Supabase's CA via DATABASE_SSL_CA.
+    ssl: opts.ssl ? { rejectUnauthorized: true, ...(opts.ca ? { ca: opts.ca } : {}) } : undefined,
     application_name: 'themerchant',
   });
   return {

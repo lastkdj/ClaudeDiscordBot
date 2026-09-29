@@ -85,6 +85,9 @@ export function validateConfig(config) {
         errors.push(`${w}: defaultAutoArchive must be one of ${ARCHIVE_MINUTES.join(', ')} minutes`);
       }
       if ((c.tags !== undefined || c.requireTag !== undefined) && type !== 'forum') errors.push(`${w}: tags/requireTag are only valid on forum channels`);
+      if (c.requireTag && !(c.tags ?? []).some((t) => !t?.moderated)) {
+        errors.push(`${w}: requireTag needs at least one tag that isn't moderated (Discord rule)`);
+      }
       if (c.tags !== undefined) {
         if (!Array.isArray(c.tags) || c.tags.length > 20) errors.push(`${w}: tags must be an array of at most 20`);
         const tagNames = new Set();

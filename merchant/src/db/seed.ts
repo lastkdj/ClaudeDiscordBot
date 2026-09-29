@@ -45,7 +45,7 @@ export async function seed(q: Q): Promise<{ games: number; services: number }> {
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   const { loadConfig } = await import('../config.js');
   const cfg = loadConfig({ requireDiscord: false });
-  const db = createDb(cfg.databaseUrl, { ssl: cfg.databaseSsl });
+  const db = createDb(cfg.databaseUrl, { ssl: cfg.databaseSsl, ca: cfg.databaseCa });
   const r = await db.tx((q) => seed(q));
   console.log(`catalog seeded: ${r.games} games, ${r.services} new services`);
   await db.close();

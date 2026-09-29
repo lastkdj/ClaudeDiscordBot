@@ -148,7 +148,7 @@ const merchantLike = () => ({
     {
       name: 'Ops',
       channels: [
-        { name: 'orders', type: 'forum', requireTag: true, defaultAutoArchive: 1440, tags: [{ name: 'Bidding', moderated: true }, { name: 'Done', moderated: true }] },
+        { name: 'orders', type: 'forum', requireTag: true, defaultAutoArchive: 1440, tags: [{ name: 'Bidding', moderated: true }, { name: 'Done' }] },
         { name: 'alerts' },
       ],
     },
@@ -194,7 +194,7 @@ test('forum tags are created, keep their ids across edits, and require-tag is se
   const bidId = forum.available_tags.find((t) => t.name === 'Bidding').id;
 
   const cfg = merchantLike();
-  cfg.categories[1].channels[0].tags = [{ name: 'Bidding', moderated: true }, { name: 'Problem', moderated: true }];
+  cfg.categories[1].channels[0].tags = [{ name: 'Bidding', moderated: true }, { name: 'Problem' }];
   const p = await plan(client, cfg);
   const upd = p.ops.find((o) => o.label.includes('"orders"'));
   assert.deepEqual(upd.details, ['tags: +Problem -Done']);
@@ -209,8 +209,10 @@ test('config validation checks guild settings and forum-only options', () => {
   cfg.guild.rulesChannel = 'nope';
   cfg.guild.verificationLevel = 'EXTREME';
   cfg.categories[0].channels[0].tags = [{ name: 'x' }];
+  cfg.categories[1].channels[0].tags = [{ name: 'Only', moderated: true }];
   const errs = validateConfig(cfg);
-  assert.equal(errs.length, 3, errs.join('\n'));
+  assert.equal(errs.length, 4, errs.join('\n'));
+  assert.ok(errs.some((e) => e.includes("isn't moderated")));
 });
 
 test('managed bot roles can be placed in the hierarchy without being edited', async () => {
@@ -225,4 +227,21 @@ test('managed bot roles can be placed in the hierarchy without being edited', as
   const order = client.state.roles.filter((r) => ['Boss', 'OpsBot', 'Member'].includes(r.name)).sort((a, b) => b.position - a.position).map((r) => r.name);
   assert.deepEqual(order, ['Boss', 'OpsBot', 'Member']);
   assert.deepEqual((await plan(client, cfg)).ops.filter((o) => !o.gate), []);
+});
+
+test('an Administrator bot enables Community itself, then converts announcements', async () => {
+  const client = createFakeDiscord();
+  client.state.botAdmin = true;
+  const bot = client.state.roles.find((r) => r.name === 'Server Manager');
+  bot.permissions = (BigInt(bot.permissions) | (1n << 3n)).toString();
+  const p1 = await plan(client, merchantLike());
+  assert.equal(p1.manual.length, 0);
+  assert.ok(p1.ops.find((o) => o.kind === 'guild').details.includes('enable Community'));
+  await apply(client, p1);
+  assert.ok(client.state.guild.features.includes('COMMUNITY'));
+  assert.equal(client.state.guild.rules_channel_id, client.state.channels.find((c) => c.name === 'rules').id);
+  const p2 = await plan(client, merchantLike());
+  assert.deepEqual(p2.ops.filter((o) => !o.gate).map((o) => o.details).flat(), ['type: text -> announcement']);
+  await apply(client, p2);
+  assert.deepEqual((await plan(client, merchantLike())).ops.filter((o) => !o.gate), []);
 });

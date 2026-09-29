@@ -39,7 +39,9 @@ export function createFakeDiscord() {
       return { id: GUILD_ID, name: 'Test Guild', owner_id: '1', approximate_member_count: 3, ...clone(state.guild), roles: clone(state.roles) };
     }
     if (method === 'PATCH' && path === `/guilds/${GUILD_ID}`) {
-      if (('rules_channel_id' in body || 'public_updates_channel_id' in body) && !state.guild.features.includes('COMMUNITY')) {
+      const community = state.guild.features.includes('COMMUNITY') || (body.features ?? []).includes('COMMUNITY');
+      if ((body.features ?? []).includes('COMMUNITY') && !state.botAdmin) throw new Error('fake discord: COMMUNITY needs Administrator');
+      if (('rules_channel_id' in body || 'public_updates_channel_id' in body) && !community) {
         throw new Error('fake discord: rules/public updates channels need COMMUNITY');
       }
       Object.assign(state.guild, body);

@@ -29,6 +29,8 @@ const Schema = z.object({
   OWNER_DISCORD_ID: z.string().regex(/^\d{15,}$/).optional(),
   DATABASE_URL: z.string().min(1, 'DATABASE_URL is required'),
   DATABASE_SSL: bool,
+  /** PEM text or a file path; Supabase publishes its root certificate in Database settings. */
+  DATABASE_SSL_CA: z.string().optional(),
   PAYOUT_ENC_KEY: z.string().optional(),
   MARKETPLACE_NAME: z.string().default('marketplace'),
   MARKETPLACE_WEBHOOK_SECRET: z.string().optional(),
@@ -48,6 +50,7 @@ export interface AppConfig {
   ownerDiscordId: string | null;
   databaseUrl: string;
   databaseSsl: boolean;
+  databaseCa: string | null;
   payoutKey: Buffer | null;
   marketplace: { name: string; webhookSecret: string | null; apiBase: string | null; apiKey: string | null };
   port: number;
@@ -75,7 +78,8 @@ export function loadConfig({ requireDiscord = true }: { requireDiscord?: boolean
     guildId: env.DISCORD_GUILD_ID ?? null,
     ownerDiscordId: env.OWNER_DISCORD_ID ?? null,
     databaseUrl: env.DATABASE_URL,
-    databaseSsl: env.DATABASE_SSL,
+    databaseSsl: env.DATABASE_SSL || !!env.DATABASE_SSL_CA,
+    databaseCa: env.DATABASE_SSL_CA ? (env.DATABASE_SSL_CA.includes('BEGIN CERTIFICATE') ? env.DATABASE_SSL_CA.replace(/\\n/g, '\n') : readFileSync(env.DATABASE_SSL_CA, 'utf8')) : null,
     payoutKey,
     marketplace: {
       name: env.MARKETPLACE_NAME,

@@ -16,10 +16,10 @@
 //   prune          -> deleting anything that is not in the config
 //   allow-everyone -> changing @everyone's server-wide permissions
 //
-// Community: bots cannot turn on the COMMUNITY feature (Discord requires
-// Administrator for that), so a config with "guild.community": true lists it
-// as a manual step for the owner. Until it is on, announcement channels are
-// created as text channels and converted on the next sync after it is enabled.
+// Community: turning on the COMMUNITY feature requires Administrator. If the
+// bot has it, the plan enables Community; otherwise it is a manual step for
+// the owner. Until it is on, announcement channels are created as text
+// channels and converted on the next sync after it is enabled.
 
 import { ALL_KNOWN, toBits, fromBits, describeDiff } from './permissions.js';
 import {
@@ -41,7 +41,8 @@ export function buildPlan(config, live) {
   const warnings = [];
   const manual = [];
   const hasCommunity = (live.guild.features ?? []).includes('COMMUNITY');
-  if (config.guild?.community && !hasCommunity) {
+  const enableCommunity = !!config.guild?.community && !hasCommunity && live.isAdmin;
+  if (config.guild?.community && !hasCommunity && !live.isAdmin) {
     manual.push('Enable Community (Server Settings -> Enable Community). Bots need Administrator for this, so the owner does it. ' +
       `When the wizard asks, pick #${config.guild.rulesChannel ?? 'rules'} as the rules channel and ` +
       `#${config.guild.publicUpdatesChannel ?? 'a staff-only channel'} for community updates, then run the plan again.`);
@@ -304,9 +305,16 @@ export function buildPlan(config, live) {
     setEnum('verificationLevel', 'verification_level', VERIFICATION_LEVELS);
     setEnum('explicitContentFilter', 'explicit_content_filter', CONTENT_FILTERS);
     setEnum('defaultNotifications', 'default_message_notifications', NOTIFICATION_LEVELS);
+    if (enableCommunity) {
+      // Discord requires these alongside COMMUNITY; only an Administrator bot can do this.
+      body.features = [...new Set([...(lg.features ?? []), 'COMMUNITY'])];
+      body.verification_level = Math.max(body.verification_level ?? lg.verification_level ?? 0, 1);
+      body.explicit_content_filter = 2;
+      details.push('enable Community');
+    }
     const refs = [['systemChannel', 'system_channel_id']];
     // Rules and community-updates channels only exist on Community servers.
-    if (hasCommunity) refs.push(['rulesChannel', 'rules_channel_id'], ['publicUpdatesChannel', 'public_updates_channel_id']);
+    if (hasCommunity || enableCommunity) refs.push(['rulesChannel', 'rules_channel_id'], ['publicUpdatesChannel', 'public_updates_channel_id']);
     const refObjs = {};
     for (const [key, apiKey] of refs) {
       if (g[key] === undefined) continue;

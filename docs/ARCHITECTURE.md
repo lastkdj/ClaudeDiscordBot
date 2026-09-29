@@ -1,6 +1,6 @@
 # TheMerchant: Shop Operations System architecture
 
-**Status:** PROPOSAL (v0.1, 2026-09-28). Waiting for owner approval. Nothing here has been built or applied to Discord.
+**Status:** v0.2 (2026-09-29). The owner approved the plan and answered Q1–Q5, Q8, Q10 and Q13 (see the decisions table at the end). The server structure (§1–3) has been applied. TheMerchant is built in `merchant/` but not yet deployed.
 
 TheMerchant is a **shop that sells inside an existing marketplace**. This system is not a marketplace. It is the back office that runs the shop in Discord: orders, sealed provider bidding, provider selection, fulfillment, accounting, provider balances, reputation and reporting. The marketplace keeps its catalog, checkout, payments, customer accounts and order system. We connect to it through an adapter.
 
@@ -725,20 +725,22 @@ High-importance actions are mirrored to #audit-log. The table is append-only and
 
 Each phase ships as working code with tests, a permission review, a security review, a scalability note, and updates to this document.
 
-## Open questions and decisions to approve
+## Decisions
 
-| # | Decision | Proposal |
+Answers from the owner (2026-09-28/29). "Default, unconfirmed" means the proposal's suggestion was built and the owner hasn't explicitly answered yet.
+
+| # | Decision | Status |
 |---|---|---|
-| Q1 | Server tree, roles, per-game "Team"/"Provider" roles, enabling Community | As in §1–2 |
-| Q2 | Provider identity visibility (Discord can't fully hide who is in the server) | Business data fully isolated; Provider roles not hoisted, no color, no provider chat. Acceptable? |
-| Q3 | Hide customer price and margin from providers | **Yes, hide both** (optional per-service bid ceiling, also hidden) |
-| Q4 | Direct-order modes | **B (redirect) + C (convert)** on; **A off** until marketplace terms are checked |
-| Q5 | Refund liability and hold period | Liability decided per refund (MERCHANT / PROVIDER / SPLIT); 3-day hold (per service) |
-| Q6 | Currency | EUR only in v1; schema supports more |
-| Q7 | Account credentials for piloted services | Never in Discord; marketplace delivery or an encrypted one-time reveal |
-| Q8 | Which marketplace? API docs / webhook support? | Needed before Phase 13; manual import until then |
-| Q9 | Report timezone | e.g. Europe/Madrid? |
-| Q10 | Hosting for TheMerchant (always-on) and Postgres | Postgres on **Supabase** (already connected to this workspace); bot on an always-on host (Railway / Fly.io / a small VPS). Vercel isn't suitable for a persistent gateway bot. |
-| Q11 | Code location | `merchant/` folder in this repo (shared CI, one history) |
-| Q12 | Managers see per-game revenue/profit? | Yes for their games; global financials Executive-only |
-| Q13 | Remove Administrator from ClaudeBot's role | Yes, replace with structural permissions (§26) |
+| Q1 | Server tree, roles, Community | **Approved** (plan approved and applied 2026-09-29). Built with Executive, Manager and Staff placed above TheMerchant, so the bot can't hand those roles out. |
+| Q2 | Provider identity visibility | **Approved:** business data fully isolated; Provider roles not hoisted and uncoloured. |
+| Q3 | Hide customer price and margin from providers | **Approved: yes.** |
+| Q4 | Direct-order modes | **Approved:** redirect + convert on, direct-in-Discord off until MyGold.gg's seller terms are checked. |
+| Q5 | Refund liability and hold period | **Approved:** liability decided per refund; 3-day hold. |
+| Q6 | Currency | Default, unconfirmed: EUR only in v1. |
+| Q7 | Account credentials never in Discord | Default, unconfirmed (built that way). |
+| Q8 | Marketplace | **MyGold.gg.** API/webhook details to follow; manual import until then. |
+| Q9 | Report timezone | Default, unconfirmed: Europe/Madrid (the `timezone` setting). |
+| Q10 | Hosting | **Owner provisioned a temporary Supabase database**; always-on bot host still to choose. |
+| Q11 | Code location | Default, unconfirmed: `merchant/` in this repo. |
+| Q12 | Managers see per-game revenue/profit | Default, unconfirmed: yes, for their games. |
+| Q13 | Administrator on ClaudeBot | **Owner restored Administrator on 2026-09-29** to simplify setup. Recommended: remove it again once setup settles. |

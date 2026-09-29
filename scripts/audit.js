@@ -54,7 +54,7 @@ run(async () => {
   if (desks) {
     const threadMgrs = (desks.permission_overwrites ?? []).filter((o) => (BigInt(o.allow) & toBits(['MANAGE_THREADS'])) !== 0n)
       .map((o) => live.roles.find((r) => r.id === o.id)?.name ?? o.id);
-    check(threadMgrs.every((n) => ['TheMerchant', 'Executive'].includes(n)), `only TheMerchant/Executive manage threads in #provider-desks (${threadMgrs.join(', ') || 'none'})`);
+    check(threadMgrs.every((n) => ['TheMerchant', 'Executive', 'ClaudeBot'].includes(n)), `only the bots and Executives manage threads in #provider-desks (${threadMgrs.join(', ') || 'none'})`);
   }
   for (const rooms of live.channels.filter((c) => c.name.endsWith('-order-rooms'))) {
     for (const o of rooms.permission_overwrites ?? []) {
