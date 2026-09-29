@@ -52,5 +52,15 @@ README.md for the commands and config format.
   deployed, and it has never connected to Discord. Don't start the bot,
   register commands (`--apply`) or run anything that posts to Discord until
   the owner says so. Tests use a local Postgres and never touch Discord.
-- Environment variables not yet set: `PAYOUT_ENC_KEY`, `OWNER_DISCORD_ID` and
-  `MARKETPLACE_NAME`.
+- Hosting (2026-09-29): Railway, free plan (a 30-day $5 trial, then $1/month;
+  expect to move to Hobby at $5/month around go-live, and ask the owner first
+  because it costs money). One service, "ClaudeDiscordBot": GitHub repo, branch
+  `claude/eloquent-volta-houcu6`, root directory `merchant` (Dockerfile),
+  region EU West, healthcheck `/health`, no public domain. It deliberately has
+  no `MERCHANT_DISCORD_TOKEN`, so it stops at startup until the owner says go.
+  Claude manages it through Railway's GraphQL API
+  (`https://backboard.railway.com/graphql/v2`, header
+  `Project-Access-Token: $RAILWAY_TOKEN`), a project token scoped to
+  production. Never print it. Going live, registering commands, plan changes
+  and deletions need the owner's explicit go.
+- MyGold.gg is on hold until the owner has its API/webhook details.

@@ -740,7 +740,7 @@ Answers from the owner (2026-09-28/29). "Default, unconfirmed" means the proposa
 | Q7 | Account credentials never in Discord | Default, unconfirmed (built that way). |
 | Q8 | Marketplace | **MyGold.gg.** API/webhook details to follow; manual import until then. |
 | Q9 | Report timezone | Default, unconfirmed: Europe/Madrid (the `timezone` setting). |
-| Q10 | Hosting | **Database: Supabase project "TheMerchant"** (`gkfqbthkfwefubfzlqxk`, eu-west-1, own organization, free tier). It is migrated (001–004) and seeded as of 2026-09-29. The always-on bot host is still to choose. |
+| Q10 | Hosting | **Database: Supabase project "TheMerchant"** (`gkfqbthkfwefubfzlqxk`, eu-west-1, own organization, free tier). It is migrated (001–004) and seeded as of 2026-09-29. Bot host: **Railway** (free plan to start, EU West, Dockerfile in `merchant/`); Koyeb was ruled out because it no longer has a free plan for new users. |
 | Q11 | Code location | Default, unconfirmed: `merchant/` in this repo. |
 | Q12 | Managers see per-game revenue/profit | Default, unconfirmed: yes, for their games. |
 | Q13 | Administrator on ClaudeBot | **Owner restored Administrator on 2026-09-29** to simplify setup. Recommended: remove it again once setup settles. |
