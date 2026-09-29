@@ -42,8 +42,12 @@ README.md for the commands and config format.
   without answering Q1–Q13 individually. Everything was built against the
   proposal's own suggested answers. Confirm them with the owner, and update
   ARCHITECTURE.md only once they have answered.
-- `server-config.json` now holds the §1–3 tree (the gaming draft is gone). It
-  has been dry-run but NOT applied. Applying needs the owner's go-ahead on the
+- 2026-09-29: owner approved the plan; first apply done (see CHANGELOG). 18
+  channels failed on permissions; the config fix (wider ClaudeBot category
+  overwrite) is dry-run only and waits for the owner. TheMerchant still sits
+  above Executive/Manager/Staff. Marketplace (Q8) is MyGold.gg; more context
+  to come from the owner.
+- `server-config.json` holds the §1–3 tree (the gaming draft is gone). Applying needs the owner's go-ahead on the
   plan, then separate confirmations for `--allow-everyone` (tightens @everyone)
   and `--prune` (deletes the default #general / General / categories).
   Community must be enabled by the owner by hand (bots need Administrator).
